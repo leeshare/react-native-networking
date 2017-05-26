@@ -17,6 +17,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.os.Environment;
 import android.util.Log;
 import android.net.Uri;
 
@@ -72,6 +73,11 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
   ReactApplicationContext reactContext;
   HashMap<Long, Callback> callbacks;
 
+  private static final String METHOD = "method";
+  private static final String DESTINATION_DIR = "destinationDir";
+
+  private long downloadId;
+
   public RNNetworkingManager(ReactApplicationContext reactContext) {
     super(reactContext);
     this.reactContext = reactContext;
@@ -89,14 +95,19 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
   @ReactMethod
   public void requestFile(String url,  ReadableMap options, Callback successCallback) {
     Log.w("dm", options.getString("method"));
-    if(options.getString("method") == "GET") {
+    if(options.getString(METHOD) == "GET") {
 
     }
-    this._downloadFile(url, successCallback);
+
+    String destinationDir = ".ys";
+    if(options.hasKey(DESTINATION_DIR)){
+      destinationDir = options.getString(DESTINATION_DIR);
+    }
+    this._downloadFile(url, destinationDir, successCallback);
     // successCallback.invoke(relativeX, relativeY, width, height);
   }
 
-  private void _downloadFile(String url, Callback successCallback) {
+  private void _downloadFile(String url, String destinationDir, Callback successCallback) {
     // Get an instance of DownloadManager
     DownloadManager downloadManager = (DownloadManager) this.reactContext.getSystemService(Context.DOWNLOAD_SERVICE);
 
@@ -108,9 +119,77 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
     request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN);
     //request.setDestinationInExternalFilesDir(context, null, "large.zip");
 
+    String fileName = "temp";
+    if(url.split("/").length > 0){
+      fileName = url.split("/")[url.split("/").length - 1];
+    }
+
+    if(destinationDir.split("/").length > 0){
+      String tempDir = "";
+      for(int i = 0; i < destinationDir.split("/").length; i++) {
+        if(destinationDir.split("/")[i].isEmpty())
+          continue;
+        if(tempDir.isEmpty())
+          tempDir = destinationDir.split("/")[i];
+        else
+          tempDir += "/" + destinationDir.split("/")[i];
+      }
+      Environment.getExternalStoragePublicDirectory(tempDir).mkdir();
+    }else {
+      Environment.getExternalStoragePublicDirectory(destinationDir).mkdir();
+    }
+    request.setDestinationInExternalPublicDir("/" + destinationDir + "/", fileName);
+
     // Enqueue the request
-    Long downloadID = downloadManager.enqueue(request);
-    callbacks.put(downloadID, successCallback);
+    downloadId = downloadManager.enqueue(request);
+    callbacks.put(downloadId, successCallback);
+  }
+
+  @ReactMethod
+  public void queryFileInfo(Callback callback){
+    DownloadManager manager = (DownloadManager) reactContext.getSystemService(Context.DOWNLOAD_SERVICE);
+    DownloadManager.Query query = new DownloadManager.Query();
+    query.setFilterById(downloadId);
+
+    Cursor cursor = manager.query(query);
+    if(!cursor.moveToFirst()){
+      cursor.close();
+      return;
+    }
+
+    long id = cursor.getLong(cursor.getColumnIndex(DownloadManager.COLUMN_ID));
+    int status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS));
+    String localFilename = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_FILENAME));
+    long downloadedSoFar = cursor.getLong(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
+    long totalSize = cursor.getLong(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+
+    cursor.close();
+
+    /*DownloadManager.STATUS_SUCCESSFUL:   下载成功
+    DownloadManager.STATUS_FAILED:       下载失败
+    DownloadManager.STATUS_PENDING:      等待下载
+    DownloadManager.STATUS_RUNNING:      正在下载
+    DownloadManager.STATUS_PAUSED:       下载暂停
+    */
+    if(status == DownloadManager.STATUS_SUCCESSFUL) {
+    }
+
+     /* 特别注意: 查询获取到的 localFilename 才是下载文件真正的保存路径，在创建
+     * 请求时设置的保存路径不一定是最终的保存路径，因为当设置的路径已是存在的文件时，
+     * 下载器会自动重命名保存路径，例如: .../demo-1.apk, .../demo-2.apk
+     */
+    //System.out.println("下载成功, 打开文件, 文件路径: " + localFilename);
+
+    WritableMap result = new WritableNativeMap();
+    result.putBoolean("is_success", DownloadManager.STATUS_SUCCESSFUL == status);
+    result.putString("file_name", localFilename);
+    result.putString("download_so_far", Long.toString(downloadedSoFar));
+    result.putString("download_total", Long.toString(totalSize));
+    result.putString("id", Long.toString(id));
+    result.putString("download_id", Long.toString(downloadId));
+
+    callback.invoke(result);
+
   }
 
 }
