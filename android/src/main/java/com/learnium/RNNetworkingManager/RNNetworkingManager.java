@@ -325,8 +325,18 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
         File f = new File(file);
         if(f.exists()){
             result.putBoolean("success", true);
+            result.putString("full_path", f.getAbsolutePath());
         }else {
-            result.putBoolean("success", false);
+            String path = Environment.getExternalStorageDirectory().getAbsolutePath();
+            result.putString("path", path);
+            File f2 = new File(path + "/" + file);
+            result.putString("file", path + "/" + file);
+            if(f2.exists()){
+                result.putBoolean("success", true);
+                result.putString("full_path", f2.getAbsolutePath());
+            }else {
+                result.putBoolean("success", false);
+            }
         }
         callback.invoke(result);
     }
