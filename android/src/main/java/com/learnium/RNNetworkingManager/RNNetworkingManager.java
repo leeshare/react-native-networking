@@ -18,6 +18,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Environment;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.net.Uri;
 
@@ -106,7 +107,7 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
     }
 
     /*
-    下载资源文件包
+    1. 下载资源文件包
      */
     @ReactMethod
     public void requestFile(String url,  ReadableMap options, Callback successCallback) {
@@ -162,7 +163,7 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
     }
 
     /*
-    查询下载进度
+    2. 查询下载进度
      */
     @ReactMethod
     public void queryFileInfo(Callback callback){
@@ -184,19 +185,19 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
 
         cursor.close();
 
-    /*DownloadManager.STATUS_SUCCESSFUL:   下载成功
-    DownloadManager.STATUS_FAILED:       下载失败
-    DownloadManager.STATUS_PENDING:      等待下载
-    DownloadManager.STATUS_RUNNING:      正在下载
-    DownloadManager.STATUS_PAUSED:       下载暂停
-    */
+        /*DownloadManager.STATUS_SUCCESSFUL:   下载成功
+        DownloadManager.STATUS_FAILED:       下载失败
+        DownloadManager.STATUS_PENDING:      等待下载
+        DownloadManager.STATUS_RUNNING:      正在下载
+        DownloadManager.STATUS_PAUSED:       下载暂停
+        */
         if(status == DownloadManager.STATUS_SUCCESSFUL) {
         }
 
-     /* 特别注意: 查询获取到的 localFilename 才是下载文件真正的保存路径，在创建
-     * 请求时设置的保存路径不一定是最终的保存路径，因为当设置的路径已是存在的文件时，
-     * 下载器会自动重命名保存路径，例如: .../demo-1.apk, .../demo-2.apk
-     */
+         /* 特别注意: 查询获取到的 localFilename 才是下载文件真正的保存路径，在创建
+         * 请求时设置的保存路径不一定是最终的保存路径，因为当设置的路径已是存在的文件时，
+         * 下载器会自动重命名保存路径，例如: .../demo-1.apk, .../demo-2.apk
+         */
         //System.out.println("下载成功, 打开文件, 文件路径: " + localFilename);
 
         WritableMap result = new WritableNativeMap();
@@ -208,16 +209,13 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
         result.putString("download_id", Long.toString(downloadId));
 
         callback.invoke(result);
-
     }
 
     /**
      * 给定根目录，返回一个相对路径所对应的实际文件名.
      *
-     * @param baseDir
-     *            指定根目录
-     * @param absFileName
-     *            相对路径名，来自于ZipEntry中的name
+     * @param baseDir 指定根目录
+     * @param absFileName 相对路径名，来自于ZipEntry中的name
      * @return java.io.File 实际的文件
      */
     private static File getRealFileName(String baseDir, String absFileName) {
@@ -245,6 +243,9 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
         return ret;
     }
 
+    /*
+    3. 解压一个 文件夹压缩包
+     */
     @ReactMethod
     public void unzipFile(String zipFile, String folderPath, Callback callback){
         ZipFile zfile = null;
@@ -317,4 +318,16 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
         callback.invoke(result);
     }
 
+
+    @ReactMethod
+    public void isFileExist(String file, Callback callback){
+        WritableMap result = new WritableNativeMap();
+        File f = new File(file);
+        if(f.exists()){
+            result.putBoolean("success", true);
+        }else {
+            result.putBoolean("success", false);
+        }
+        callback.invoke(result);
+    }
 }
