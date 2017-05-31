@@ -24,10 +24,12 @@ import android.net.Uri;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -318,7 +320,9 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
         callback.invoke(result);
     }
 
-
+    /*
+    4. 判断文件或目录是否存在
+     */
     @ReactMethod
     public void isFileExist(String file, Callback callback){
         WritableMap result = new WritableNativeMap();
@@ -338,6 +342,43 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
                 result.putBoolean("success", false);
             }
         }
+        callback.invoke(result);
+    }
+
+    /*
+    5. 读文件，返回字符串
+     */
+    @ReactMethod
+    public void readFile(String path, Callback callback) {
+        File file = new File(path);
+        BufferedReader reader = null;
+        String laststr = "";
+        try {
+            // System.out.println("以行为单位读取文件内容，一次读一整行：");
+            reader = new BufferedReader(new FileReader(file));
+            String tempString = null;
+            int line = 1;
+            // 一次读入一行，直到读入null为文件结束
+            while ((tempString = reader.readLine()) != null) {
+                // 显示行号
+                System.out.println("line " + line + ": " + tempString);
+                laststr = laststr + tempString;
+                ++line;
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e1) {
+                }
+            }
+        }
+
+        WritableMap result = new WritableNativeMap();
+        result.putString("content", laststr);
         callback.invoke(result);
     }
 }
