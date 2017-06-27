@@ -1,14 +1,72 @@
 {
-  "name": "react-native-networking",
+  "_args": [
+    [
+      {
+        "raw": "react-native-networking@git+https://github.com/leeshare/react-native-networking.git",
+        "scope": null,
+        "escapedName": "react-native-networking",
+        "name": "react-native-networking",
+        "rawSpec": "git+https://github.com/leeshare/react-native-networking.git",
+        "spec": "git+https://github.com/leeshare/react-native-networking.git",
+        "type": "hosted",
+        "hosted": {
+          "type": "github",
+          "ssh": "git@github.com:leeshare/react-native-networking.git",
+          "sshUrl": "git+ssh://git@github.com/leeshare/react-native-networking.git",
+          "httpsUrl": "git+https://github.com/leeshare/react-native-networking.git",
+          "gitUrl": "git://github.com/leeshare/react-native-networking.git",
+          "shortcut": "github:leeshare/react-native-networking",
+          "directUrl": "https://raw.githubusercontent.com/leeshare/react-native-networking/master/package.json"
+        }
+      },
+      "/Users/admin/WorkStation/UseChinese/useabcv2/SourceCode/SMApp"
+    ]
+  ],
+  "_from": "git+https://github.com/leeshare/react-native-networking.git",
+  "_id": "react-native-networking@0.1.5",
+  "_inCache": true,
+  "_location": "/react-native-networking",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "react-native-networking@git+https://github.com/leeshare/react-native-networking.git",
+    "scope": null,
+    "escapedName": "react-native-networking",
+    "name": "react-native-networking",
+    "rawSpec": "git+https://github.com/leeshare/react-native-networking.git",
+    "spec": "git+https://github.com/leeshare/react-native-networking.git",
+    "type": "hosted",
+    "hosted": {
+      "type": "github",
+      "ssh": "git@github.com:leeshare/react-native-networking.git",
+      "sshUrl": "git+ssh://git@github.com/leeshare/react-native-networking.git",
+      "httpsUrl": "git+https://github.com/leeshare/react-native-networking.git",
+      "gitUrl": "git://github.com/leeshare/react-native-networking.git",
+      "shortcut": "github:leeshare/react-native-networking",
+      "directUrl": "https://raw.githubusercontent.com/leeshare/react-native-networking/master/package.json"
+    }
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "git+https://github.com/leeshare/react-native-networking.git#47246e377376c14e4acae5edcf109e544122ebcd",
+  "_shasum": "d0abf6004f7d2bb54d9ada6cfec9ca229e9901f2",
+  "_shrinkwrap": null,
+  "_spec": "react-native-networking@git+https://github.com/leeshare/react-native-networking.git",
+  "_where": "/Users/admin/WorkStation/UseChinese/useabcv2/SourceCode/SMApp",
+  "author": {
+    "name": "Erdem Başeğmez",
+    "email": "eduedix@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/eduedix/react-native-networking/issues"
+  },
+  "dependencies": {},
   "description": "react-native module to download and upload files on iOS and Android.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "devDependencies": {
+    "react-native": ">=0.6.0"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/eduedix/react-native-networking.git"
-  },
+  "gitHead": "47246e377376c14e4acae5edcf109e544122ebcd",
+  "homepage": "https://github.com/eduedix/react-native-networking#readme",
   "keywords": [
     "react-native",
     "download",
@@ -19,17 +77,21 @@
     "ios",
     "android"
   ],
-  "author": "Erdem Başeğmez <eduedix@gmail.com>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/eduedix/react-native-networking/issues"
-  },
-  "homepage": "https://github.com/eduedix/react-native-networking#readme",
-  "devDependencies": {
-    "react-native": ">=0.6.0"
-  },
+  "main": "index.js",
+  "name": "react-native-networking",
+  "optionalDependencies": {},
   "peerDependencies": {
     "react-native": ">=0.6.0"
   },
-  "version": "0.1.5"
+  "readme": "\nfork from:\t\thttps://github.com/eduedix/react-native-networking\n\nI changed some function in android.\n\n",
+  "readmeFilename": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eduedix/react-native-networking.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "0.2.0"
 }
