@@ -1,6 +1,7 @@
 package com.learnium.RNNetworkingManager;
 
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
@@ -342,10 +343,14 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
             result.putBoolean("success", true);
             result.putString("full_path", f.getAbsolutePath());
         }else {
-            String path = Environment.getExternalStorageDirectory().getAbsolutePath();
-            result.putString("path", path);
-            File f2 = new File(path + "/" + file);
-            result.putString("file", path + "/" + file);
+            String fileDir = reactContext.getApplicationContext().getExternalFilesDir(file).getAbsolutePath();
+            //result.putString("ApplicationContextFileDir", fileDir);
+
+            //String path = Environment.getExternalStorageDirectory().getAbsolutePath();
+            //result.putString("ExternalStorageDirectory", path);
+            //File f2 = new File(path + "/" + file);
+            File f2 = new File(fileDir);
+            //result.putString("file", path + "/" + file);
             if(f2.exists()){
                 result.putBoolean("success", true);
                 result.putString("full_path", f2.getAbsolutePath());
