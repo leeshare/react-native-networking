@@ -168,7 +168,6 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
         request.setDestinationInExternalPublicDir("/" + destinationDir + "/", fileName);
         */
         String dirType = Environment.getExternalStorageState();
-        alert(dirType);
         request.setDestinationInExternalFilesDir(reactContext, destinationDir, fileName);
 
         // Enqueue the request
@@ -343,13 +342,14 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
             result.putBoolean("success", true);
             result.putString("full_path", f.getAbsolutePath());
         }else {
-            String fileDir = reactContext.getApplicationContext().getExternalFilesDir(file).getAbsolutePath();
+            String fileDir = reactContext.getApplicationContext().getExternalFilesDir("").getAbsolutePath();
+            File f2 = new File(fileDir + "/" + file);
+
             //result.putString("ApplicationContextFileDir", fileDir);
 
             //String path = Environment.getExternalStorageDirectory().getAbsolutePath();
             //result.putString("ExternalStorageDirectory", path);
             //File f2 = new File(path + "/" + file);
-            File f2 = new File(fileDir);
             //result.putString("file", path + "/" + file);
             if(f2.exists()){
                 result.putBoolean("success", true);
