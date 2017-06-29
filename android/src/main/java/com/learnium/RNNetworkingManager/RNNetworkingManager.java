@@ -21,6 +21,7 @@ import android.os.Environment;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.net.Uri;
+import android.widget.Toast;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -103,6 +104,11 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
         reactContext.registerReceiver(downloadCompleteReceiver, downloadCompleteIntentFilter);
     }
 
+    @ReactMethod
+    public void alert(String message) {
+        //Toast.makeText(getReactApplicationContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public String getName() {
         return "RNNetworkingManager";
@@ -143,6 +149,7 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
             fileName = url.split("/")[url.split("/").length - 1];
         }
 
+        /*
         if(destinationDir.split("/").length > 0){
             String tempDir = "";
             for(int i = 0; i < destinationDir.split("/").length; i++) {
@@ -158,6 +165,10 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
             Environment.getExternalStoragePublicDirectory(destinationDir).mkdir();
         }
         request.setDestinationInExternalPublicDir("/" + destinationDir + "/", fileName);
+        */
+        String dirType = Environment.getExternalStorageState();
+        alert(dirType);
+        request.setDestinationInExternalFilesDir(reactContext, destinationDir, fileName);
 
         // Enqueue the request
         downloadId = downloadManager.enqueue(request);
