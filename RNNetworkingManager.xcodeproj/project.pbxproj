@@ -7,8 +7,31 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8405E8571EFE18D0008C4FE5 /* aescrypt.c in Sources */ = {isa = PBXBuildFile; fileRef = 8405E8371EFE18D0008C4FE5 /* aescrypt.c */; };
+		8405E8581EFE18D0008C4FE5 /* aeskey.c in Sources */ = {isa = PBXBuildFile; fileRef = 8405E8381EFE18D0008C4FE5 /* aeskey.c */; };
+		8405E8591EFE18D0008C4FE5 /* aestab.c in Sources */ = {isa = PBXBuildFile; fileRef = 8405E83A1EFE18D0008C4FE5 /* aestab.c */; };
+		8405E85A1EFE18D0008C4FE5 /* entropy.c in Sources */ = {isa = PBXBuildFile; fileRef = 8405E83F1EFE18D0008C4FE5 /* entropy.c */; };
+		8405E85B1EFE18D0008C4FE5 /* fileenc.c in Sources */ = {isa = PBXBuildFile; fileRef = 8405E8411EFE18D0008C4FE5 /* fileenc.c */; };
+		8405E85C1EFE18D0008C4FE5 /* hmac.c in Sources */ = {isa = PBXBuildFile; fileRef = 8405E8431EFE18D0008C4FE5 /* hmac.c */; };
+		8405E85D1EFE18D0008C4FE5 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 8405E8451EFE18D0008C4FE5 /* ioapi.c */; };
+		8405E85E1EFE18D0008C4FE5 /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = 8405E8471EFE18D0008C4FE5 /* mztools.c */; };
+		8405E85F1EFE18D0008C4FE5 /* prng.c in Sources */ = {isa = PBXBuildFile; fileRef = 8405E8491EFE18D0008C4FE5 /* prng.c */; };
+		8405E8601EFE18D0008C4FE5 /* pwd2key.c in Sources */ = {isa = PBXBuildFile; fileRef = 8405E84B1EFE18D0008C4FE5 /* pwd2key.c */; };
+		8405E8611EFE18D0008C4FE5 /* sha1.c in Sources */ = {isa = PBXBuildFile; fileRef = 8405E84D1EFE18D0008C4FE5 /* sha1.c */; };
+		8405E8621EFE18D0008C4FE5 /* SSZipArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = 8405E8501EFE18D0008C4FE5 /* SSZipArchive.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		8405E8631EFE18D0008C4FE5 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 8405E8521EFE18D0008C4FE5 /* unzip.c */; };
+		8405E8641EFE18D0008C4FE5 /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 8405E8541EFE18D0008C4FE5 /* zip.c */; };
+		8405E9E91F00A1AA008C4FE5 /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84FFADAE1EFE04C40080559E /* libz.1.dylib */; };
+		84FFAD851EFDD1A50080559E /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FFAD731EFDD1A50080559E /* AFHTTPRequestOperation.m */; };
+		84FFAD861EFDD1A50080559E /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FFAD751EFDD1A50080559E /* AFHTTPRequestOperationManager.m */; };
+		84FFAD871EFDD1A50080559E /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FFAD771EFDD1A50080559E /* AFHTTPSessionManager.m */; };
+		84FFAD881EFDD1A50080559E /* AFNetworkReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FFAD7A1EFDD1A50080559E /* AFNetworkReachabilityManager.m */; };
+		84FFAD891EFDD1A50080559E /* AFSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FFAD7C1EFDD1A50080559E /* AFSecurityPolicy.m */; };
+		84FFAD8A1EFDD1A50080559E /* AFURLConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FFAD7E1EFDD1A50080559E /* AFURLConnectionOperation.m */; };
+		84FFAD8B1EFDD1A50080559E /* AFURLRequestSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FFAD801EFDD1A50080559E /* AFURLRequestSerialization.m */; };
+		84FFAD8C1EFDD1A50080559E /* AFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FFAD821EFDD1A50080559E /* AFURLResponseSerialization.m */; };
+		84FFAD8D1EFDD1A50080559E /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FFAD841EFDD1A50080559E /* AFURLSessionManager.m */; };
 		E839CE341B3EF54100115CBE /* libRNNetworkingManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E839CE281B3EF54100115CBE /* libRNNetworkingManager.a */; };
-		E84E23431B4010E2004AF747 /* libPods-AFNetworking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E84E23421B4010E2004AF747 /* libPods-AFNetworking.a */; };
 		E895ECAD1B3F055D009D0187 /* RNNetworkingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E895ECAB1B3F055D009D0187 /* RNNetworkingManager.m */; };
 /* End PBXBuildFile section */
 
@@ -36,9 +59,61 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		1E84B1D9F89D6738C6D4628A /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		600C3B9490B8A2B1F13B43BA /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		82BBF9E62EFDB751A795140C /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		8405E8351EFE18D0008C4FE5 /* aes_via_ace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes_via_ace.h; sourceTree = "<group>"; };
+		8405E8361EFE18D0008C4FE5 /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
+		8405E8371EFE18D0008C4FE5 /* aescrypt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aescrypt.c; sourceTree = "<group>"; };
+		8405E8381EFE18D0008C4FE5 /* aeskey.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aeskey.c; sourceTree = "<group>"; };
+		8405E8391EFE18D0008C4FE5 /* aesopt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aesopt.h; sourceTree = "<group>"; };
+		8405E83A1EFE18D0008C4FE5 /* aestab.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aestab.c; sourceTree = "<group>"; };
+		8405E83B1EFE18D0008C4FE5 /* aestab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aestab.h; sourceTree = "<group>"; };
+		8405E83C1EFE18D0008C4FE5 /* brg_endian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brg_endian.h; sourceTree = "<group>"; };
+		8405E83D1EFE18D0008C4FE5 /* brg_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brg_types.h; sourceTree = "<group>"; };
+		8405E83E1EFE18D0008C4FE5 /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
+		8405E83F1EFE18D0008C4FE5 /* entropy.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = entropy.c; sourceTree = "<group>"; };
+		8405E8401EFE18D0008C4FE5 /* entropy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = entropy.h; sourceTree = "<group>"; };
+		8405E8411EFE18D0008C4FE5 /* fileenc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fileenc.c; sourceTree = "<group>"; };
+		8405E8421EFE18D0008C4FE5 /* fileenc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fileenc.h; sourceTree = "<group>"; };
+		8405E8431EFE18D0008C4FE5 /* hmac.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hmac.c; sourceTree = "<group>"; };
+		8405E8441EFE18D0008C4FE5 /* hmac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hmac.h; sourceTree = "<group>"; };
+		8405E8451EFE18D0008C4FE5 /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
+		8405E8461EFE18D0008C4FE5 /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
+		8405E8471EFE18D0008C4FE5 /* mztools.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mztools.c; sourceTree = "<group>"; };
+		8405E8481EFE18D0008C4FE5 /* mztools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mztools.h; sourceTree = "<group>"; };
+		8405E8491EFE18D0008C4FE5 /* prng.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = prng.c; sourceTree = "<group>"; };
+		8405E84A1EFE18D0008C4FE5 /* prng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = prng.h; sourceTree = "<group>"; };
+		8405E84B1EFE18D0008C4FE5 /* pwd2key.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pwd2key.c; sourceTree = "<group>"; };
+		8405E84C1EFE18D0008C4FE5 /* pwd2key.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pwd2key.h; sourceTree = "<group>"; };
+		8405E84D1EFE18D0008C4FE5 /* sha1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sha1.c; sourceTree = "<group>"; };
+		8405E84E1EFE18D0008C4FE5 /* sha1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha1.h; sourceTree = "<group>"; };
+		8405E84F1EFE18D0008C4FE5 /* SSZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSZipArchive.h; sourceTree = "<group>"; };
+		8405E8501EFE18D0008C4FE5 /* SSZipArchive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSZipArchive.m; sourceTree = "<group>"; };
+		8405E8511EFE18D0008C4FE5 /* SSZipCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSZipCommon.h; sourceTree = "<group>"; };
+		8405E8521EFE18D0008C4FE5 /* unzip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unzip.c; sourceTree = "<group>"; };
+		8405E8531EFE18D0008C4FE5 /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unzip.h; sourceTree = "<group>"; };
+		8405E8541EFE18D0008C4FE5 /* zip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zip.c; sourceTree = "<group>"; };
+		8405E8551EFE18D0008C4FE5 /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
+		8405E8561EFE18D0008C4FE5 /* ZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipArchive.h; sourceTree = "<group>"; };
+		84FFAD721EFDD1A50080559E /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
+		84FFAD731EFDD1A50080559E /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
+		84FFAD741EFDD1A50080559E /* AFHTTPRequestOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperationManager.h; sourceTree = "<group>"; };
+		84FFAD751EFDD1A50080559E /* AFHTTPRequestOperationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperationManager.m; sourceTree = "<group>"; };
+		84FFAD761EFDD1A50080559E /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPSessionManager.h; sourceTree = "<group>"; };
+		84FFAD771EFDD1A50080559E /* AFHTTPSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPSessionManager.m; sourceTree = "<group>"; };
+		84FFAD781EFDD1A50080559E /* AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworking.h; sourceTree = "<group>"; };
+		84FFAD791EFDD1A50080559E /* AFNetworkReachabilityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkReachabilityManager.h; sourceTree = "<group>"; };
+		84FFAD7A1EFDD1A50080559E /* AFNetworkReachabilityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkReachabilityManager.m; sourceTree = "<group>"; };
+		84FFAD7B1EFDD1A50080559E /* AFSecurityPolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFSecurityPolicy.h; sourceTree = "<group>"; };
+		84FFAD7C1EFDD1A50080559E /* AFSecurityPolicy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFSecurityPolicy.m; sourceTree = "<group>"; };
+		84FFAD7D1EFDD1A50080559E /* AFURLConnectionOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLConnectionOperation.h; sourceTree = "<group>"; };
+		84FFAD7E1EFDD1A50080559E /* AFURLConnectionOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLConnectionOperation.m; sourceTree = "<group>"; };
+		84FFAD7F1EFDD1A50080559E /* AFURLRequestSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLRequestSerialization.h; sourceTree = "<group>"; };
+		84FFAD801EFDD1A50080559E /* AFURLRequestSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLRequestSerialization.m; sourceTree = "<group>"; };
+		84FFAD811EFDD1A50080559E /* AFURLResponseSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLResponseSerialization.h; sourceTree = "<group>"; };
+		84FFAD821EFDD1A50080559E /* AFURLResponseSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLResponseSerialization.m; sourceTree = "<group>"; };
+		84FFAD831EFDD1A50080559E /* AFURLSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLSessionManager.h; sourceTree = "<group>"; };
+		84FFAD841EFDD1A50080559E /* AFURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLSessionManager.m; sourceTree = "<group>"; };
+		84FFADAE1EFE04C40080559E /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = ../../../../../../../../../usr/lib/libz.1.dylib; sourceTree = "<group>"; };
 		E839CE281B3EF54100115CBE /* libRNNetworkingManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNNetworkingManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E839CE331B3EF54100115CBE /* RNNetworkingManagerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RNNetworkingManagerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E839CE391B3EF54100115CBE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -57,7 +132,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E84E23431B4010E2004AF747 /* libPods-AFNetworking.a in Frameworks */,
+				8405E9E91F00A1AA008C4FE5 /* libz.1.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,18 +147,10 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5EADCD1AFF0CDBF2300B6EC1 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				1E84B1D9F89D6738C6D4628A /* Pods.debug.xcconfig */,
-				82BBF9E62EFDB751A795140C /* Pods.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 		BF53719229FD95876ABBE82A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				84FFADAE1EFE04C40080559E /* libz.1.dylib */,
 				E84E23421B4010E2004AF747 /* libPods-AFNetworking.a */,
 				E84E23121B400D94004AF747 /* libPods-AFNetworking.a */,
 				E84E23101B400D1F004AF747 /* libPods.a */,
@@ -101,7 +168,6 @@
 				E839CE2A1B3EF54100115CBE /* RNNetworkingManager */,
 				E839CE371B3EF54100115CBE /* RNNetworkingManagerTests */,
 				E839CE291B3EF54100115CBE /* Products */,
-				5EADCD1AFF0CDBF2300B6EC1 /* Pods */,
 				BF53719229FD95876ABBE82A /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -118,8 +184,61 @@
 		E839CE2A1B3EF54100115CBE /* RNNetworkingManager */ = {
 			isa = PBXGroup;
 			children = (
-				E895ECAB1B3F055D009D0187 /* RNNetworkingManager.m */,
+				8405E8351EFE18D0008C4FE5 /* aes_via_ace.h */,
+				8405E8361EFE18D0008C4FE5 /* aes.h */,
+				8405E8371EFE18D0008C4FE5 /* aescrypt.c */,
+				8405E8381EFE18D0008C4FE5 /* aeskey.c */,
+				8405E8391EFE18D0008C4FE5 /* aesopt.h */,
+				8405E83A1EFE18D0008C4FE5 /* aestab.c */,
+				8405E83B1EFE18D0008C4FE5 /* aestab.h */,
+				8405E83C1EFE18D0008C4FE5 /* brg_endian.h */,
+				8405E83D1EFE18D0008C4FE5 /* brg_types.h */,
+				8405E83E1EFE18D0008C4FE5 /* crypt.h */,
+				8405E83F1EFE18D0008C4FE5 /* entropy.c */,
+				8405E8401EFE18D0008C4FE5 /* entropy.h */,
+				8405E8411EFE18D0008C4FE5 /* fileenc.c */,
+				8405E8421EFE18D0008C4FE5 /* fileenc.h */,
+				8405E8431EFE18D0008C4FE5 /* hmac.c */,
+				8405E8441EFE18D0008C4FE5 /* hmac.h */,
+				8405E8451EFE18D0008C4FE5 /* ioapi.c */,
+				8405E8461EFE18D0008C4FE5 /* ioapi.h */,
+				8405E8471EFE18D0008C4FE5 /* mztools.c */,
+				8405E8481EFE18D0008C4FE5 /* mztools.h */,
+				8405E8491EFE18D0008C4FE5 /* prng.c */,
+				8405E84A1EFE18D0008C4FE5 /* prng.h */,
+				8405E84B1EFE18D0008C4FE5 /* pwd2key.c */,
+				8405E84C1EFE18D0008C4FE5 /* pwd2key.h */,
+				8405E84D1EFE18D0008C4FE5 /* sha1.c */,
+				8405E84E1EFE18D0008C4FE5 /* sha1.h */,
+				8405E84F1EFE18D0008C4FE5 /* SSZipArchive.h */,
+				8405E8501EFE18D0008C4FE5 /* SSZipArchive.m */,
+				8405E8511EFE18D0008C4FE5 /* SSZipCommon.h */,
+				8405E8521EFE18D0008C4FE5 /* unzip.c */,
+				8405E8531EFE18D0008C4FE5 /* unzip.h */,
+				8405E8541EFE18D0008C4FE5 /* zip.c */,
+				8405E8551EFE18D0008C4FE5 /* zip.h */,
+				8405E8561EFE18D0008C4FE5 /* ZipArchive.h */,
+				84FFAD721EFDD1A50080559E /* AFHTTPRequestOperation.h */,
+				84FFAD731EFDD1A50080559E /* AFHTTPRequestOperation.m */,
+				84FFAD741EFDD1A50080559E /* AFHTTPRequestOperationManager.h */,
+				84FFAD751EFDD1A50080559E /* AFHTTPRequestOperationManager.m */,
+				84FFAD761EFDD1A50080559E /* AFHTTPSessionManager.h */,
+				84FFAD771EFDD1A50080559E /* AFHTTPSessionManager.m */,
+				84FFAD781EFDD1A50080559E /* AFNetworking.h */,
+				84FFAD791EFDD1A50080559E /* AFNetworkReachabilityManager.h */,
+				84FFAD7A1EFDD1A50080559E /* AFNetworkReachabilityManager.m */,
+				84FFAD7B1EFDD1A50080559E /* AFSecurityPolicy.h */,
+				84FFAD7C1EFDD1A50080559E /* AFSecurityPolicy.m */,
+				84FFAD7D1EFDD1A50080559E /* AFURLConnectionOperation.h */,
+				84FFAD7E1EFDD1A50080559E /* AFURLConnectionOperation.m */,
+				84FFAD7F1EFDD1A50080559E /* AFURLRequestSerialization.h */,
+				84FFAD801EFDD1A50080559E /* AFURLRequestSerialization.m */,
+				84FFAD811EFDD1A50080559E /* AFURLResponseSerialization.h */,
+				84FFAD821EFDD1A50080559E /* AFURLResponseSerialization.m */,
+				84FFAD831EFDD1A50080559E /* AFURLSessionManager.h */,
+				84FFAD841EFDD1A50080559E /* AFURLSessionManager.m */,
 				E895ECAC1B3F055D009D0187 /* RNNetworkingManager.h */,
+				E895ECAB1B3F055D009D0187 /* RNNetworkingManager.m */,
 			);
 			path = RNNetworkingManager;
 			sourceTree = "<group>";
@@ -147,11 +266,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E839CE3C1B3EF54100115CBE /* Build configuration list for PBXNativeTarget "RNNetworkingManager" */;
 			buildPhases = (
-				11D2CC5028931640898935C8 /* Check Pods Manifest.lock */,
 				E839CE241B3EF54100115CBE /* Sources */,
 				E839CE251B3EF54100115CBE /* Frameworks */,
 				E839CE261B3EF54100115CBE /* Copy Files */,
-				FB68A9780B5A12ABFC496613 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -225,45 +342,35 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		11D2CC5028931640898935C8 /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		FB68A9780B5A12ABFC496613 /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		E839CE241B3EF54100115CBE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8405E85C1EFE18D0008C4FE5 /* hmac.c in Sources */,
+				84FFAD8A1EFDD1A50080559E /* AFURLConnectionOperation.m in Sources */,
+				84FFAD8C1EFDD1A50080559E /* AFURLResponseSerialization.m in Sources */,
+				84FFAD851EFDD1A50080559E /* AFHTTPRequestOperation.m in Sources */,
+				8405E8591EFE18D0008C4FE5 /* aestab.c in Sources */,
 				E895ECAD1B3F055D009D0187 /* RNNetworkingManager.m in Sources */,
+				84FFAD881EFDD1A50080559E /* AFNetworkReachabilityManager.m in Sources */,
+				8405E8581EFE18D0008C4FE5 /* aeskey.c in Sources */,
+				84FFAD8D1EFDD1A50080559E /* AFURLSessionManager.m in Sources */,
+				8405E85D1EFE18D0008C4FE5 /* ioapi.c in Sources */,
+				8405E85E1EFE18D0008C4FE5 /* mztools.c in Sources */,
+				8405E8631EFE18D0008C4FE5 /* unzip.c in Sources */,
+				8405E85B1EFE18D0008C4FE5 /* fileenc.c in Sources */,
+				8405E8621EFE18D0008C4FE5 /* SSZipArchive.m in Sources */,
+				8405E8601EFE18D0008C4FE5 /* pwd2key.c in Sources */,
+				8405E85F1EFE18D0008C4FE5 /* prng.c in Sources */,
+				8405E8641EFE18D0008C4FE5 /* zip.c in Sources */,
+				84FFAD861EFDD1A50080559E /* AFHTTPRequestOperationManager.m in Sources */,
+				8405E8611EFE18D0008C4FE5 /* sha1.c in Sources */,
+				84FFAD891EFDD1A50080559E /* AFSecurityPolicy.m in Sources */,
+				8405E8571EFE18D0008C4FE5 /* aescrypt.c in Sources */,
+				84FFAD871EFDD1A50080559E /* AFHTTPSessionManager.m in Sources */,
+				84FFAD8B1EFDD1A50080559E /* AFURLRequestSerialization.m in Sources */,
+				8405E85A1EFE18D0008C4FE5 /* entropy.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -361,7 +468,6 @@
 		};
 		E839CE3D1B3EF54100115CBE /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1E84B1D9F89D6738C6D4628A /* Pods.debug.xcconfig */;
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -381,7 +487,6 @@
 		};
 		E839CE3E1B3EF54100115CBE /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 82BBF9E62EFDB751A795140C /* Pods.release.xcconfig */;
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
