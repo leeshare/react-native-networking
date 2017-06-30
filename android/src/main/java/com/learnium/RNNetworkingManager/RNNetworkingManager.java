@@ -269,6 +269,10 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
             e.printStackTrace();
             return;
         }
+        File temp = new File(folderPath);
+        if(!temp.exists()){
+            temp.mkdir();
+        }
         Enumeration zList = zfile.entries();
         ZipEntry ze = null;
         byte[] buf = new byte[1024];
