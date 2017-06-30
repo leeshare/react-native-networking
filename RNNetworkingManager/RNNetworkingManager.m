@@ -21,7 +21,9 @@
 @synthesize bridge = _bridge;
 
 //放在公共变量中
-NSMutableURLRequest *request = nil;
+AFHTTPRequestOperation *operation = nil;
+long fileExceptReadBytes = 0;
+long fileReadBytes = 0;
 
 RCT_EXPORT_MODULE();
 
@@ -84,7 +86,7 @@ RCT_EXPORT_METHOD(requestFile:(NSString *)URLString
         
         //    NSDictionary *parameters = @{};
         NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:method URLString:URLString parameters:parameters error:nil];
-        
+      
         NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
             // find the Documents directory for the app
             NSURL *documentsDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
@@ -105,7 +107,26 @@ RCT_EXPORT_METHOD(requestFile:(NSString *)URLString
             callback(@[output]);
         }];
         [downloadTask resume];
+      
+      
+      operation = [[AFHTTPRequestOperation alloc]initWithRequest:request];
+      [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        fileReadBytes = totalBytesRead;
+        fileExceptReadBytes = totalBytesExpectedToRead;
+      }];
+      [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         
+        //success(responseObject);
+        
+      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+        //failure(error);
+        
+      }];
+      
+      [operation start];
+      
+      
     } else if ([method isEqualToString:@"POST"]) {
         // request serializer: formdata multipart file
         // response: response object (json)
@@ -123,7 +144,7 @@ RCT_EXPORT_METHOD(requestFile:(NSString *)URLString
         
         [manager setResponseSerializer:[AFJSONResponseSerializer serializer]];
         
-        request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:method URLString:URLString parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:method URLString:URLString parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
             
             [formData appendPartWithFileURL:fileURL name:@"file" fileName:@"fileName.mp4" mimeType:@"video/mp4" error:nil];
         } error:nil];
@@ -143,11 +164,11 @@ RCT_EXPORT_METHOD(requestFile:(NSString *)URLString
 
 //2. 查询文件下载进度
 RCT_EXPORT_METHOD(queryFileInfo:
-                  callback:(RCTResponseSenderBlock)callback){
+                  (RCTResponseSenderBlock)callback){
     
     NSMutableDictionary *output = [[NSMutableDictionary alloc] init];
     
-    if(request != nil){
+    /*if(request != nil){
         AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]initWithRequest:request];
         //[operation setOutputStream:[NSOutputStream outputStreamToFileAtPath:savedPath append:NO]];
         [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
@@ -168,20 +189,67 @@ RCT_EXPORT_METHOD(queryFileInfo:
                                 @"id": @"",
                                 @"download_id": @""
                                 } forKey:@"success_ios"];
-            
-            /*
-             result.putBoolean("is_success", DownloadManager.STATUS_SUCCESSFUL == status);
-             result.putString("file_name", localFilename);
-             result.putString("download_so_far", Long.toString(downloadedSoFar));
-             result.putString("download_total", Long.toString(totalSize));
-             result.putString("id", Long.toString(id));
-             result.putString("download_id", Long.toString(downloadId));
-             */
+          
+          
+            callback(@[output]);
             
         }];
-    }
+      [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        //success(responseObject);
+        
+      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+        //failure(error);
+        
+      }];
+      
+      [operation start];
+    }*/
+  
+  /*if(operation != nil){
+    [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+      float p = (float)totalBytesRead / totalBytesExpectedToRead;
+      
+      Boolean isSuccess = totalBytesRead >= totalBytesExpectedToRead;
+      
+      [output setValue:@(isSuccess) forKey:@"is_success"];
+      [output setValue:@"" forKey:@"file_name"];
+      [output setObject:@{@"file_name": @"",
+                          @"download_so_far": [NSNumber numberWithLong:totalBytesRead],
+                          @"download_total": [NSNumber numberWithLong:totalBytesExpectedToRead],
+                          @"id": @"",
+                          @"download_id": @""
+                          } forKey:@"success_ios"];
+      
+      
+      callback(@[output]);
+      
+    }];
+   }
+   */
+    
+    //float p = (float)fileReadBytes / (fileReadBytes + fileExceptReadBytes);
+    
+    Boolean isSuccess = fileExceptReadBytes <= 0;
+    
+    [output setValue:@(isSuccess) forKey:@"is_success"];
+    [output setValue:@"" forKey:@"file_name"];
+    //[output setValue:totalBytesRead forKey:@"download_so_far"];
+    //[output setValue:totalBytesExpectedToRead forKey:@"download_total"];
+    
+    //[output setObject:@{@"response": [NSNumber numberWithInteger:[(NSHTTPURLResponse *)response statusCode]], @"responseObject": responseObject} forKey:@"success"];
+    [output setObject:@{@"file_name": @"",
+                        @"download_so_far": [NSNumber numberWithLong:fileReadBytes],
+                        @"download_total": [NSNumber numberWithLong:(fileReadBytes + fileExceptReadBytes)],
+                        @"id": @"",
+                        @"download_id": @"",
+                        @"is_success": @(isSuccess)
+                        } forKey:@"success_ios"];
+    
     
     callback(@[output]);
+  
 }
 
 //3. 解压一个文件压缩包
