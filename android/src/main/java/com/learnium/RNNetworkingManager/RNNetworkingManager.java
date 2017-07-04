@@ -330,6 +330,9 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
             return;
         }
 
+        File f = new File(zipFile);
+        f.delete();
+
         WritableMap result = new WritableNativeMap();
         result.putBoolean("success", true);
         callback.invoke(result);
