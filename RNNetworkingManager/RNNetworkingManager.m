@@ -24,6 +24,7 @@
 AFHTTPRequestOperation *operation = nil;
 long fileExceptReadBytes = 0;
 long fileReadBytes = 0;
+NSString *fileName=@"";
 
 RCT_EXPORT_MODULE();
 
@@ -34,7 +35,7 @@ RCT_EXPORT_METHOD(requestFile:(NSString *)URLString
                   callback:(RCTResponseSenderBlock)callback) {
     
     
-    
+    fileName=@"";//reset
     NSMutableDictionary *output = [[NSMutableDictionary alloc] init];
     NSURL *url = [NSURL URLWithString:URLString];
     
@@ -49,6 +50,23 @@ RCT_EXPORT_METHOD(requestFile:(NSString *)URLString
         data = parameters[@"data"];
         
         destinationDir = parameters[@"destinationDir"];
+      
+      NSString * docsdir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+      NSString *dataFilePath = [docsdir stringByAppendingPathComponent:destinationDir];
+      
+      NSFileManager *fileManager = [NSFileManager defaultManager];
+      
+      BOOL isDir = NO;
+      
+      // fileExistsAtPath 判断一个文件或目录是否有效，isDirectory判断是否一个目录
+      BOOL existed = [fileManager fileExistsAtPath:dataFilePath isDirectory:&isDir];
+      
+      if ( !(isDir == YES && existed == YES) ) {
+        
+        // 在 Document 目录下创建一个 head 目录
+        [fileManager createDirectoryAtPath:dataFilePath withIntermediateDirectories:YES attributes:nil error:nil];
+      }
+      
         
     } else {
         method = @"GET";
@@ -91,7 +109,11 @@ RCT_EXPORT_METHOD(requestFile:(NSString *)URLString
             // find the Documents directory for the app
             NSURL *documentsDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
             // set destination to Documents/response.suggestedFilename
-            return [documentsDirectoryURL URLByAppendingPathComponent:[response suggestedFilename]];
+          
+            NSString* str=[[NSString alloc]initWithFormat:@"%@%@",destinationDir,[response suggestedFilename]];
+            fileName=str;
+            NSURL* tmp= [documentsDirectoryURL URLByAppendingPathComponent:str];
+            return tmp;
         } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
             if (error) {
                 [output setObject:[error localizedDescription] forKey:@"error"];
@@ -102,7 +124,6 @@ RCT_EXPORT_METHOD(requestFile:(NSString *)URLString
                 NSLog(@"path =   %@", [filePath path]);
                 NSLog(@"absoluteString =   %@", [filePath absoluteString]);
                 NSLog(@"lastPathComponent =    %@", [filePath lastPathComponent]);
-                
             }
             callback(@[output]);
         }];
@@ -231,22 +252,24 @@ RCT_EXPORT_METHOD(queryFileInfo:
     
     //float p = (float)fileReadBytes / (fileReadBytes + fileExceptReadBytes);
     
-    Boolean isSuccess = fileExceptReadBytes <= 0;
-    
+    //Boolean isSuccess = fileExceptReadBytes <= 0;
+  
+  Boolean isSuccess = fileReadBytes==fileExceptReadBytes && ![fileName isEqualToString:@""];
+  
     [output setValue:@(isSuccess) forKey:@"is_success"];
     [output setValue:@"" forKey:@"file_name"];
     //[output setValue:totalBytesRead forKey:@"download_so_far"];
     //[output setValue:totalBytesExpectedToRead forKey:@"download_total"];
     
     //[output setObject:@{@"response": [NSNumber numberWithInteger:[(NSHTTPURLResponse *)response statusCode]], @"responseObject": responseObject} forKey:@"success"];
-    [output setObject:@{@"file_name": @"",
+    [output setObject:@{@"file_name": fileName,//@""
                         @"download_so_far": [NSNumber numberWithLong:fileReadBytes],
-                        @"download_total": [NSNumber numberWithLong:(fileReadBytes + fileExceptReadBytes)],
+                        //@"download_total": [NSNumber numberWithLong:(fileReadBytes + fileExceptReadBytes)],
+                        @"download_total": [NSNumber numberWithLong:(fileExceptReadBytes)],
                         @"id": @"",
                         @"download_id": @"",
                         @"is_success": @(isSuccess)
                         } forKey:@"success_ios"];
-    
     
     callback(@[output]);
   
@@ -261,10 +284,31 @@ RCT_EXPORT_METHOD(unzipFile:(NSString *)zipFile
     // 解压
     NSString *zipPath = zipFile;
     NSString *destinationPath = folderPath;
+  
+  
+  NSString * docsdir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+  NSString *dataFilePath = [docsdir stringByAppendingPathComponent:destinationPath];
+  
+  NSFileManager *fileManager = [NSFileManager defaultManager];
+  
+  BOOL isDir = NO;
+  
+  // fileExistsAtPath 判断一个文件或目录是否有效，isDirectory判断是否一个目录
+  BOOL existed = [fileManager fileExistsAtPath:dataFilePath isDirectory:&isDir];
+  
+  if ( !(isDir == YES && existed == YES) ) {
+    
+    // 在 Document 目录下创建一个 head 目录
+    [fileManager createDirectoryAtPath:dataFilePath withIntermediateDirectories:YES attributes:nil error:nil];
+  }
+  zipPath=[[NSString alloc]initWithFormat:@"%@/%@",docsdir,zipPath];
+  destinationPath=[[NSString alloc]initWithFormat:@"%@/%@",docsdir,destinationPath];
     if( [SSZipArchive unzipFileAtPath:zipPath toDestination:destinationPath] ){
         
         [output setValue:@"true" forKey:@"success"];
         callback(@[output]);
+        //
+        [fileManager removeItemAtPath:zipPath error:nil];
     }
     
 }
