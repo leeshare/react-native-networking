@@ -133,6 +133,41 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
         // successCallback.invoke(relativeX, relativeY, width, height);
     }
 
+    //循环删除文件
+    public static void deleteDirWihtFile(File dir) {
+        if (dir == null || !dir.exists() || !dir.isDirectory())
+            return;
+        for (File file : dir.listFiles()) {
+            if (file.isFile())
+                file.delete(); // 删除所有文件
+            else if (file.isDirectory())
+                deleteDirWihtFile(file); // 递规的方式删除文件夹
+        }
+        dir.delete();// 删除目录本身
+    }
+
+    //clear destination files
+    @ReactMethod
+    public void clearDestinationDir(ReadableMap options, Callback callback) {
+        String destinationDir = ".ys";
+        if(options.hasKey(DESTINATION_DIR)){
+            destinationDir = options.getString(DESTINATION_DIR);
+        }
+        DownloadManager downloadManager = (DownloadManager) this.reactContext.getSystemService(Context.DOWNLOAD_SERVICE);
+
+        //String dirType = Environment.getExternalStorageState();
+        //request.setDestinationInExternalFilesDir(reactContext, destinationDir, fileName);
+        File f = getReactApplicationContext().getExternalFilesDir(null);
+        String dirPath = f.getAbsolutePath();
+        File coursePath = new File(dirPath + "/" + destinationDir);
+        deleteDirWihtFile(coursePath);
+
+        WritableMap result = new WritableNativeMap();
+        result.putString("path1", dirPath);
+        result.putString("path2", coursePath.getAbsolutePath());
+        callback.invoke(result);
+    }
+
     private void _downloadFile(String url, String destinationDir, Callback successCallback) {
         // Get an instance of DownloadManager
         DownloadManager downloadManager = (DownloadManager) this.reactContext.getSystemService(Context.DOWNLOAD_SERVICE);
