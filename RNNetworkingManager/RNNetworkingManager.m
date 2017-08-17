@@ -380,5 +380,41 @@ RCT_EXPORT_METHOD(readFile:(NSString *)path
 }
 
 
+//6. 清空缓存
+RCT_EXPORT_METHOD(clearDestinationDir:(NSDictionary *)parameters
+                  callback:(RCTResponseSenderBlock)callback) {
+    
+    fileName=@"";//reset
+    NSMutableDictionary *output = [[NSMutableDictionary alloc] init];
+    
+    NSString *method;
+    //  NSDictionary *headers;
+    NSDictionary *data;
+    NSString *destinationDir = @".ys";
+    
+    if ([parameters count] != 0) {
+        
+        destinationDir = parameters[@"destinationDir"];
+        
+        NSString * docsdir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+        NSString *dataFilePath = [docsdir stringByAppendingPathComponent:destinationDir];
+        
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        
+        BOOL isDir = NO;
+        // fileExistsAtPath 判断一个文件或目录是否有效，isDirectory判断是否一个目录
+        BOOL existed = [fileManager fileExistsAtPath:dataFilePath isDirectory:&isDir];
+        if (isDir == YES && existed == YES) {
+            
+            [fileManager removeItemAtPath:dataFilePath error:nil];
+            
+        }
+        
+        [output setValue:dataFilePath forKey:@"path1"];
+        //[output setValue:content forKey:@"path2"];
+    }
+    
+    callback(@[output]);
+}
 
 @end
