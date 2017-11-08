@@ -146,29 +146,6 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
         dir.delete();// 删除目录本身
     }
 
-    //clear destination files
-    @ReactMethod
-    public void clearDestinationDir(ReadableMap options, Callback callback) {
-        //String destinationDir = ".ys";
-        String destinationDir = "";
-        if(options.hasKey(DESTINATION_DIR)){
-            destinationDir = options.getString(DESTINATION_DIR);
-        }
-        DownloadManager downloadManager = (DownloadManager) this.reactContext.getSystemService(Context.DOWNLOAD_SERVICE);
-
-        //String dirType = Environment.getExternalStorageState();
-        //request.setDestinationInExternalFilesDir(reactContext, destinationDir, fileName);
-        File f = getReactApplicationContext().getExternalFilesDir(null);
-        String dirPath = f.getAbsolutePath();
-        File coursePath = new File(dirPath + "/" + destinationDir);
-        deleteDirWihtFile(coursePath);
-
-        WritableMap result = new WritableNativeMap();
-        result.putString("path1", dirPath);
-        result.putString("path2", coursePath.getAbsolutePath());
-        callback.invoke(result);
-    }
-
     private void _downloadFile(String url, String destinationDir, Callback successCallback) {
         // Get an instance of DownloadManager
         DownloadManager downloadManager = (DownloadManager) this.reactContext.getSystemService(Context.DOWNLOAD_SERVICE);
@@ -440,4 +417,31 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
         result.putString("content", laststr);
         callback.invoke(result);
     }
+    
+    
+    /*
+    6. 清除目标目录 clear destination files
+    */
+    @ReactMethod
+    public void clearDestinationDir(ReadableMap options, Callback callback) {
+        //String destinationDir = ".ys";
+        String destinationDir = "";
+        if(options.hasKey(DESTINATION_DIR)){
+            destinationDir = options.getString(DESTINATION_DIR);
+        }
+        //DownloadManager downloadManager = (DownloadManager) this.reactContext.getSystemService(Context.DOWNLOAD_SERVICE);
+
+        //String dirType = Environment.getExternalStorageState();
+        //request.setDestinationInExternalFilesDir(reactContext, destinationDir, fileName);
+        File f = getReactApplicationContext().getExternalFilesDir(null);
+        String dirPath = f.getAbsolutePath();
+        File coursePath = new File(dirPath + "/" + destinationDir);
+        deleteDirWihtFile(coursePath);
+
+        WritableMap result = new WritableNativeMap();
+        result.putString("path1", dirPath);
+        result.putString("path2", coursePath.getAbsolutePath());
+        callback.invoke(result);
+    }
+    
 }
