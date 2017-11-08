@@ -3,6 +3,7 @@ fork from:		https://github.com/eduedix/react-native-networking
 
 I changed some function in android.
 
+(2017-11-08)
 包含以下几个方法：
 
     1. 下载资源文件包  requestFile
