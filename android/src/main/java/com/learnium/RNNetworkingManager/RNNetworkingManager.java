@@ -149,7 +149,8 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
     //clear destination files
     @ReactMethod
     public void clearDestinationDir(ReadableMap options, Callback callback) {
-        String destinationDir = ".ys";
+        //String destinationDir = ".ys";
+        String destinationDir = "";
         if(options.hasKey(DESTINATION_DIR)){
             destinationDir = options.getString(DESTINATION_DIR);
         }
