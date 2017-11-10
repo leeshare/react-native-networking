@@ -14,7 +14,7 @@ I changed some function in android.
     
     4. 判读文件或目录是否存在 isFileExist
     
-    4.1 判断音频文件是否存在时，顺便得到音频文件时长  isFileExist2
+    4.1 判断音频文件是否存在时，顺便得到音频文件时长  isMediaExist
     
     
     5. 读取文件，返回字符串 readFile
