@@ -18,6 +18,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.media.MediaPlayer;
 import android.os.Environment;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -355,7 +356,7 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
     4. 判断文件或目录是否存在
      */
     @ReactMethod
-    public void isFileExist(String file, Callback callback){
+    public void isFileExist(String file, Callback callback, Boolean isNeedDuration){
         WritableMap result = new WritableNativeMap();
         File f = new File(file);
         if(f.exists()){
@@ -372,11 +373,68 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
             //File f2 = new File(path + "/" + file);
             //result.putString("file", path + "/" + file);
             if(f2.exists()){
+                String path = f2.getAbsolutePath();
+                double duration = 0;
+                if(isNeedDuration){
+                    MediaPlayer player = new MediaPlayer();
+                    try {
+                        player.setDataSource(path);
+                        player.prepare();
+                    } catch(IOException e){
+                        e.printStackTrace();
+                    } catch(Exception e){
+                        e.printStackTrace();
+                    }
+                    duration = player.getDuration();
+                    player.release();
+                }
                 result.putBoolean("success", true);
-                result.putString("full_path", f2.getAbsolutePath());
+                result.putString("full_path", path);
+                result.putDouble("duration", duration);
             }else {
                 result.putBoolean("success", false);
             }
+        }
+        callback.invoke(result);
+    }
+    /*
+    4.1. 判断文件或目录是否存在
+    并获得音频时长
+    */
+    @ReactMethod
+    public void isFileExist2(String file, Boolean isNeedDuration, Callback callback){
+        WritableMap result = new WritableNativeMap();
+        File f = new File(file);
+        String path = "";
+        if(f.exists()){
+            path = f.getAbsolutePath();
+            result.putBoolean("success", true);
+            result.putString("full_path", path);
+        }else {
+            String fileDir = reactContext.getApplicationContext().getExternalFilesDir("").getAbsolutePath();
+            File f2 = new File(fileDir + "/" + file);
+            if(f2.exists()){
+                path = f2.getAbsolutePath();
+                result.putBoolean("success", true);
+                result.putString("full_path", path);
+            }else {
+                result.putBoolean("success", false);
+            }
+        }
+        double duration = 0;
+        if(isNeedDuration && path != "") {
+            MediaPlayer player = new MediaPlayer();
+            try {
+                player.setDataSource(path);
+                player.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            duration = player.getDuration();
+            player.release();
+            result.putDouble("duration", duration);
         }
         callback.invoke(result);
     }
@@ -417,8 +475,8 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
         result.putString("content", laststr);
         callback.invoke(result);
     }
-    
-    
+
+
     /*
     6. 清除目标目录 clear destination files
     */
@@ -443,5 +501,5 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
         result.putString("path2", coursePath.getAbsolutePath());
         callback.invoke(result);
     }
-    
+
 }
