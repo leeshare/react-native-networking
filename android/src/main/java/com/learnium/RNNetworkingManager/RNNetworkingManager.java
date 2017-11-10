@@ -402,7 +402,7 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
     并获得音频时长
     */
     @ReactMethod
-    public void isFileExist2(String file, Boolean isNeedDuration, Callback callback){
+    public void isMediaExist(String file, Boolean isNeedDuration, Callback callback){
         WritableMap result = new WritableNativeMap();
         File f = new File(file);
         String path = "";
