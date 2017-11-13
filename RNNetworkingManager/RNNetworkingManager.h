@@ -8,6 +8,7 @@
 
 //#import <UIKit/UIKit.h>
 #import "RCTBridgeModule.h"
+#import "AVFoundation/AVFoundation.h"
 
 
 @interface RNNetworkingManager : NSObject <RCTBridgeModule>

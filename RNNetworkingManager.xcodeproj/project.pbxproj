@@ -22,6 +22,7 @@
 		8405E8631EFE18D0008C4FE5 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 8405E8521EFE18D0008C4FE5 /* unzip.c */; };
 		8405E8641EFE18D0008C4FE5 /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 8405E8541EFE18D0008C4FE5 /* zip.c */; };
 		8405E9E91F00A1AA008C4FE5 /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84FFADAE1EFE04C40080559E /* libz.1.dylib */; };
+		84AC348C1FB93429002A4878 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84AC348B1FB933F6002A4878 /* AVFoundation.framework */; };
 		84FFAD851EFDD1A50080559E /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FFAD731EFDD1A50080559E /* AFHTTPRequestOperation.m */; };
 		84FFAD861EFDD1A50080559E /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FFAD751EFDD1A50080559E /* AFHTTPRequestOperationManager.m */; };
 		84FFAD871EFDD1A50080559E /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FFAD771EFDD1A50080559E /* AFHTTPSessionManager.m */; };
@@ -94,6 +95,7 @@
 		8405E8541EFE18D0008C4FE5 /* zip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zip.c; sourceTree = "<group>"; };
 		8405E8551EFE18D0008C4FE5 /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
 		8405E8561EFE18D0008C4FE5 /* ZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipArchive.h; sourceTree = "<group>"; };
+		84AC348B1FB933F6002A4878 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		84FFAD721EFDD1A50080559E /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
 		84FFAD731EFDD1A50080559E /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
 		84FFAD741EFDD1A50080559E /* AFHTTPRequestOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperationManager.h; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8405E9E91F00A1AA008C4FE5 /* libz.1.dylib in Frameworks */,
+				84AC348C1FB93429002A4878 /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -150,6 +153,7 @@
 		BF53719229FD95876ABBE82A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				84AC348B1FB933F6002A4878 /* AVFoundation.framework */,
 				84FFADAE1EFE04C40080559E /* libz.1.dylib */,
 				E84E23421B4010E2004AF747 /* libPods-AFNetworking.a */,
 				E84E23121B400D94004AF747 /* libPods-AFNetworking.a */,
