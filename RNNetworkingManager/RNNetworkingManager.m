@@ -188,73 +188,8 @@ RCT_EXPORT_METHOD(queryFileInfo:
                   (RCTResponseSenderBlock)callback){
     
     NSMutableDictionary *output = [[NSMutableDictionary alloc] init];
-    
-    /*if(request != nil){
-        AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]initWithRequest:request];
-        //[operation setOutputStream:[NSOutputStream outputStreamToFileAtPath:savedPath append:NO]];
-        [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
-            float p = (float)totalBytesRead / totalBytesExpectedToRead;
-            //progress(p);
-            
-            Boolean isSuccess = totalBytesRead >= totalBytesExpectedToRead;
-            
-            [output setValue:@(isSuccess) forKey:@"is_success"];
-            [output setValue:@"" forKey:@"file_name"];
-            //[output setValue:totalBytesRead forKey:@"download_so_far"];
-            //[output setValue:totalBytesExpectedToRead forKey:@"download_total"];
-            
-            //[output setObject:@{@"response": [NSNumber numberWithInteger:[(NSHTTPURLResponse *)response statusCode]], @"responseObject": responseObject} forKey:@"success"];
-            [output setObject:@{@"file_name": @"",
-                                @"download_so_far": [NSNumber numberWithLong:totalBytesRead],
-                                @"download_total": [NSNumber numberWithLong:totalBytesExpectedToRead],
-                                @"id": @"",
-                                @"download_id": @""
-                                } forKey:@"success_ios"];
-          
-          
-            callback(@[output]);
-            
-        }];
-      [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
-        //success(responseObject);
-        
-      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
-        //failure(error);
-        
-      }];
-      
-      [operation start];
-    }*/
   
-  /*if(operation != nil){
-    [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
-      float p = (float)totalBytesRead / totalBytesExpectedToRead;
-      
-      Boolean isSuccess = totalBytesRead >= totalBytesExpectedToRead;
-      
-      [output setValue:@(isSuccess) forKey:@"is_success"];
-      [output setValue:@"" forKey:@"file_name"];
-      [output setObject:@{@"file_name": @"",
-                          @"download_so_far": [NSNumber numberWithLong:totalBytesRead],
-                          @"download_total": [NSNumber numberWithLong:totalBytesExpectedToRead],
-                          @"id": @"",
-                          @"download_id": @""
-                          } forKey:@"success_ios"];
-      
-      
-      callback(@[output]);
-      
-    }];
-   }
-   */
-    
-    //float p = (float)fileReadBytes / (fileReadBytes + fileExceptReadBytes);
-    
-    //Boolean isSuccess = fileExceptReadBytes <= 0;
-  
-  Boolean isSuccess = fileReadBytes==fileExceptReadBytes && ![fileName isEqualToString:@""];
+    Boolean isSuccess = fileReadBytes==fileExceptReadBytes && ![fileName isEqualToString:@""];
   
     [output setValue:@(isSuccess) forKey:@"is_success"];
     [output setValue:@"" forKey:@"file_name"];
@@ -364,6 +299,52 @@ RCT_EXPORT_METHOD(isFileExist:(NSString *)file
     callback(@[output]);
 }
 
+-(float)durationWithVideo:(NSURL *)videoUrl{
+    NSURL *mp3_url = [[NSURL alloc] initFileURLWithPath:videoUrl];
+    //NSDictionary *opts = [NSDictionary dictionaryWithObject:@(NO) forKey:AVURLAssetPreferPreciseDurationAndTimingKey];
+    //AVURLAsset *urlAsset = [AVURLAsset URLAssetWithURL:videoUrl options:opts]; // 初始化视频媒体文件
+    AVURLAsset *urlAsset = [AVURLAsset URLAssetWithURL:mp3_url options:nil];
+
+    float second = 0.0;
+    second = urlAsset.duration.value / urlAsset.duration.timescale; // 获取视频总时长,单位秒
+    NSLog(@"duration:%f", second);
+
+    return second;
+}
+
+//4.1 判断音频文件是否在本机已存在 并获得音频时长
+RCT_EXPORT_METHOD(isMediaExist:(NSString *)file
+                  isNeedDuration:(BOOL)isNeedDuration
+                  callback:(RCTResponseSenderBlock)callback) {
+    
+    NSMutableDictionary *output = [[NSMutableDictionary alloc] init];
+    
+    
+    NSFileManager *file_manager = [NSFileManager defaultManager];
+    NSString *full_path = [self get_filename:file];
+    if( [file_manager fileExistsAtPath:full_path] ){
+        [output setValue:full_path forKey:@"full_path"];
+        [output setValue:@"true" forKey:@"success"];
+    }else {
+        full_path = [self get_filename2:file];
+        if([file_manager fileExistsAtPath:full_path]){
+            [output setValue:full_path forKey:@"full_path"];
+            [output setValue:@"true" forKey:@"success"];
+        }else {
+            [output setValue:@"false" forKey:@"success"];
+        }
+    }
+    double duration = 0;
+    if(isNeedDuration && full_path){
+        
+        duration = [self durationWithVideo:full_path];
+        
+        [output setValue:@(duration) forKey:@"duration"];
+    }
+    
+    callback(@[output]);
+}
+
 //5. 读取文件
 RCT_EXPORT_METHOD(readFile:(NSString *)path
                   callback:(RCTResponseSenderBlock) callback) {
@@ -372,7 +353,7 @@ RCT_EXPORT_METHOD(readFile:(NSString *)path
     //NSString *str = [NSString stringWithContentsOfFile:path];
     //UTF-8编码
     NSString *content = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
-    NSLog(@"%@",content);
+    //NSLog(@"%@",content);
     
     [output setValue:content forKey:@"content"];
     
@@ -390,7 +371,8 @@ RCT_EXPORT_METHOD(clearDestinationDir:(NSDictionary *)parameters
     NSString *method;
     //  NSDictionary *headers;
     NSDictionary *data;
-    NSString *destinationDir = @".ys";
+    //NSString *destinationDir = @".ys";
+    NSString *destinationDir = @"";
     
     if ([parameters count] != 0) {
         
