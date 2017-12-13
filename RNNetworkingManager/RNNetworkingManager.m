@@ -321,19 +321,26 @@ RCT_EXPORT_METHOD(isMediaExist:(NSString *)file
     
     
     NSFileManager *file_manager = [NSFileManager defaultManager];
-    NSString *full_path = [self get_filename:file];
-    if( [file_manager fileExistsAtPath:full_path] ){
+    NSString *full_path = file;
+    if([file_manager fileExistsAtPath:file]){
         [output setValue:full_path forKey:@"full_path"];
         [output setValue:@"true" forKey:@"success"];
     }else {
-        full_path = [self get_filename2:file];
-        if([file_manager fileExistsAtPath:full_path]){
+        full_path = [self get_filename:file];
+        if( [file_manager fileExistsAtPath:full_path] ){
             [output setValue:full_path forKey:@"full_path"];
             [output setValue:@"true" forKey:@"success"];
         }else {
-            [output setValue:@"false" forKey:@"success"];
+            full_path = [self get_filename2:file];
+            if([file_manager fileExistsAtPath:full_path]){
+                [output setValue:full_path forKey:@"full_path"];
+                [output setValue:@"true" forKey:@"success"];
+            }else {
+                [output setValue:@"false" forKey:@"success"];
+            }
         }
     }
+    
     double duration = 0;
     if(isNeedDuration && full_path){
         
