@@ -13,7 +13,7 @@
 #import "AFHTTPRequestOperation.h"
 
 #ifdef __OBJC__
-#import "ZipArchive.h"
+#import "ZipArchive2.h"
 #endif
 
 @implementation RNNetworkingManager
@@ -238,7 +238,7 @@ RCT_EXPORT_METHOD(unzipFile:(NSString *)zipFile
   }
   zipPath=[[NSString alloc]initWithFormat:@"%@/%@",docsdir,zipPath];
   destinationPath=[[NSString alloc]initWithFormat:@"%@/%@",docsdir,destinationPath];
-    if( [SSZipArchive unzipFileAtPath:zipPath toDestination:destinationPath] ){
+    if( [SSZipArchive2 unzipFileAtPath:zipPath toDestination:destinationPath] ){
         
         [output setValue:@"true" forKey:@"success"];
         callback(@[output]);
