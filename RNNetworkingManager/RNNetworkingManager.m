@@ -9,6 +9,8 @@
 #import "RNNetworkingManager.h"
 #import "AFHTTPSessionManager.h"
 #import "AFURLSessionManager.h"
+#import <React/RCTView.h>
+#import "UIView+React.h"
 
 #import "AFHTTPRequestOperation.h"
 
@@ -404,6 +406,56 @@ RCT_EXPORT_METHOD(clearDestinationDir:(NSDictionary *)parameters
     }
     
     callback(@[output]);
+}
+
+- (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *)interactionController
+
+{
+    return self;
+}
+
+//7. 打开文件
+RCT_EXPORT_METHOD(openFile:(NSString *)path) {
+    //url 为需要调用第三方打开的文件地址
+    //NSURL *url = [NSURL fileURLWithPath:_dict[@"path"]];
+    NSURL *url = [NSURL fileURLWithPath:path];
+    /*_documentInteractionController = [UIDocumentInteractionController
+                                      interactionControllerWithURL:url];
+    [_documentInteractionController setDelegate:self];
+    
+    //[_documentInteractionController presentOpenInMenuFromRect:CGRectZero inView:self.view animated:YES];
+    
+    [_documentInteractionController presentOpenInMenuFromRect:CGRectZero inView:nil animated:YES];
+    */
+    
+    //[self.class presentViewController:_documentInteractionController animated:YES completion:nil];
+    
+    
+    //self.documentVC = [UIDocumentInteractionController interactionControllerWithURL:url];
+    //[self.documentVC setDelegate:self];
+    //BOOL canOpen =  [self.documentVC presentOpenInMenuFromRect:CGRectZero inView:self.view animated:YES];
+    self.documentInteractionController = [UIDocumentInteractionController interactionControllerWithURL:url];
+    
+    //CGRect navRect = self.view.navigationBar.frame;
+    //navRect.size =CGSizeMake(self.view.width,40.0f);
+    //[self.documentInteractionController presentOptionsMenuFromRect:navRectinView:self.view animated:YES];
+    
+    // 得到当前应用程序的主要窗口
+    UIWindow * window = [[UIApplication sharedApplication] keyWindow];
+    // 获取窗口的当前显示视图
+    UIView *frontView = [[window subviews] objectAtIndex:0];
+    
+    [self.documentInteractionController setDelegate:self];
+    //BOOL canOpen = [self.documentInteractionController presentPreviewAnimated:YES];
+    BOOL canOpen =  [self.documentInteractionController presentOpenInMenuFromRect:CGRectMake(200, 700, 10, 10) inView:frontView animated:YES];
+    
+    // 返回NO说明没有可以打开该文件的爱屁屁, 友情提示一下
+    if (canOpen == NO) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"没有找到可以打开该文件的应用" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        [alert show];
+    }
+    
+    
 }
 
 @end
