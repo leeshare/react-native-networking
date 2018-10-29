@@ -10,6 +10,7 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.bridge.Callback;
 
+import android.app.Activity;
 import android.app.DownloadManager;
 import android.app.DownloadManager.Query;
 import android.app.DownloadManager.Request;
@@ -371,6 +372,8 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
                 result.putString("full_path", f2.getAbsolutePath());
             }else {
                 result.putBoolean("success", false);
+                result.putString("fileDir", fileDir);
+                result.putString("full_path", f2.getAbsolutePath());
             }
         }
         callback.invoke(result);
@@ -478,6 +481,20 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
         result.putString("path1", dirPath);
         result.putString("path2", coursePath.getAbsolutePath());
         callback.invoke(result);
+    }
+
+    /*
+    7. 打开文件
+    2018-10-27
+    */
+    @ReactMethod
+    public void openFile(String path) {
+        //OpenFileUtil.openFile(path);
+
+        File file = new File(path);
+        if (!file.exists())
+            return;
+        OpenFileUtil2.openFile(file, reactContext);
     }
 
 }
