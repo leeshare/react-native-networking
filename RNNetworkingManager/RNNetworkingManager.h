@@ -6,11 +6,18 @@
 //  Copyright (c) 2015 Facebook. All rights reserved.
 //
 
-//#import <UIKit/UIKit.h>
+#import <UIKit/UIKit.h>
 #import "RCTBridgeModule.h"
 #import "AVFoundation/AVFoundation.h"
 
-
+//UIViewController
+//
 @interface RNNetworkingManager : NSObject <RCTBridgeModule>
+
+@end
+
+@interface RNNetworkingManager ()<UIDocumentInteractionControllerDelegate>
+
+@property (nonatomic, strong) UIDocumentInteractionController *documentInteractionController;
 
 @end
