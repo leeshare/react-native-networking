@@ -95,8 +95,12 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
 
     private static final String METHOD = "method";
     private static final String DESTINATION_DIR = "destinationDir";
+    private static final String TO_SHARE_FOLDER = "toShareFolder";
+    private static final String SHARE_FOLDER_TYPE = "shareFolderType";
 
     private long downloadId;
+    private String toShareFolder = "no";     //不传 就是不存放到 相册中
+    private String shareFolderType = "0";     //如 1 相册/ 2 视频/ 3 音频 / 4 文档等
 
     public RNNetworkingManager(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -130,6 +134,12 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
         String destinationDir = ".ys";
         if(options.hasKey(DESTINATION_DIR)){
             destinationDir = options.getString(DESTINATION_DIR);
+        }
+        if(options.hasKey(TO_SHARE_FOLDER)){
+            toShareFolder = options.getString(TO_SHARE_FOLDER);
+        }
+        if(options.hasKey(SHARE_FOLDER_TYPE)){
+            shareFolderType = options.getString(SHARE_FOLDER_TYPE);
         }
         this._downloadFile(url, destinationDir, successCallback);
         // successCallback.invoke(relativeX, relativeY, width, height);
@@ -182,8 +192,24 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
         }
         request.setDestinationInExternalPublicDir("/" + destinationDir + "/", fileName);
         */
-        String dirType = Environment.getExternalStorageState();
-        request.setDestinationInExternalFilesDir(reactContext, destinationDir, fileName);
+        //String dirType = Environment.getExternalStorageState();
+        //request.setDestinationInExternalFilesDir(reactContext, destinationDir, fileName);
+
+        if(toShareFolder.equals("yes")){
+            String _path = destinationDir + fileName;
+            if(shareFolderType.equals("1"))
+                request.setDestinationInExternalPublicDir( Environment.DIRECTORY_DCIM, _path);
+            else if(shareFolderType.equals("2"))
+                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_MOVIES, _path);
+            else if(shareFolderType.equals("3"))
+                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_MUSIC, _path);
+            else if(shareFolderType.equals("4"))
+                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOCUMENTS, _path);
+            else
+                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, _path);
+        }else {
+            request.setDestinationInExternalFilesDir(reactContext, destinationDir, fileName);
+        }
 
         // Enqueue the request
         downloadId = downloadManager.enqueue(request);
