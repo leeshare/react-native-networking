@@ -5,6 +5,9 @@ import java.io.File;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
+import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 
 public class OpenFileUtil2 {
 
@@ -87,9 +90,30 @@ public class OpenFileUtil2 {
         // 获取文件 file 的 MIME 类型
         String type = getMIMEType(file);
         // 设置 intent 的 data 和 Type 属性。
-        intent.setDataAndType(/* uri */Uri.fromFile(file), type);
+        //intent.setDataAndType(/* uri */Uri.fromFile(file), type);
+
+        Uri uri;
+        if (Build.VERSION.SDK_INT >= 24) {
+            //uri = FileProvider.getUriForFile(context,BuildConfig.APPLICATION_ID+".provider", file);
+            uri = FileProvider.getUriForFile(context,"com.shenmo.yuneduapp.provider", file);
+
+            //intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);//这里加入flag
+
+
+        } else {
+            uri = Uri.fromFile(file);
+
+        }
+
+        intent.setDataAndType(/* uri */uri, type);
         // 跳转
-        context.startActivity(intent);
+        try {
+            context.startActivity(intent);
+        }catch(Exception e){
+
+        }
 
     }
 
