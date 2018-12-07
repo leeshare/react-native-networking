@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -197,8 +198,13 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
 
         if(toShareFolder.equals("yes")){
             String _path = destinationDir + fileName;
-            if(shareFolderType.equals("1"))
+            if(shareFolderType.equals("1")){
+                //图片下载，如果图片没有后缀，则默认加 .png
+                if(_path.indexOf(".") <= 0){
+                    _path += ".png";
+                }
                 request.setDestinationInExternalPublicDir( Environment.DIRECTORY_DCIM, _path);
+            }
             else if(shareFolderType.equals("2"))
                 request.setDestinationInExternalPublicDir(Environment.DIRECTORY_MOVIES, _path);
             else if(shareFolderType.equals("3"))
@@ -216,14 +222,20 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
         callbacks.put(downloadId, successCallback);
     }
 
-    /*
-    2. 查询下载进度
+    /**
+     * 2.1 查询下载进度
+     * @param _downloadId
+     * @param callback
      */
     @ReactMethod
-    public void queryFileInfo(Callback callback){
+    public void queryFileInfo2(long _downloadId, Callback callback){
         DownloadManager manager = (DownloadManager) reactContext.getSystemService(Context.DOWNLOAD_SERVICE);
         DownloadManager.Query query = new DownloadManager.Query();
-        query.setFilterById(downloadId);
+        if(_downloadId > 0){
+            query.setFilterById(_downloadId);
+        }else {
+            query.setFilterById(downloadId);
+        }
 
         Cursor cursor = manager.query(query);
         if(!cursor.moveToFirst()){
@@ -233,9 +245,23 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
 
         long id = cursor.getLong(cursor.getColumnIndex(DownloadManager.COLUMN_ID));
         int status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS));
-        String localFilename = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_FILENAME));
         long downloadedSoFar = cursor.getLong(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
         long totalSize = cursor.getLong(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+
+        String localFilename = null;
+        int fileUriIdx = cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI);
+        String fileUri = cursor.getString(fileUriIdx);
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            if (fileUri != null) {
+                localFilename = Uri.parse(fileUri).getPath();
+            }
+        } else {
+            //Android 7.0以上的方式：请求获取写入权限，这一步报错
+            //过时的方式：DownloadManager.COLUMN_LOCAL_FILENAME
+            //int fileNameIdx = c.getColumnIndex(DownloadManager.COLUMN_LOCAL_FILENAME);
+            //fileName = c.getString(fileNameIdx);
+            localFilename = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_FILENAME));
+        }
 
         cursor.close();
 
@@ -263,6 +289,14 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
         result.putString("download_id", Long.toString(downloadId));
 
         callback.invoke(result);
+    }
+
+    /*
+    2. 查询下载进度
+     */
+    @ReactMethod
+    public void queryFileInfo(Callback callback){
+        queryFileInfo2(0, callback);
     }
 
     /**
@@ -391,6 +425,42 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
             result.putString("full_path", f.getAbsolutePath());
         }else {
             String fileDir = reactContext.getApplicationContext().getExternalFilesDir("").getAbsolutePath();
+            File f2 = new File(fileDir + "/" + file);
+
+            if(f2.exists()){
+                result.putBoolean("success", true);
+                result.putString("full_path", f2.getAbsolutePath());
+            }else {
+                result.putBoolean("success", false);
+                result.putString("fileDir", fileDir);
+                result.putString("full_path", f2.getAbsolutePath());
+            }
+        }
+        callback.invoke(result);
+    }
+    /*
+    4.2 判断文件或目录是否存在
+     */
+    @ReactMethod
+    public void isFilePublicExist(String file, String fileType, Callback callback){
+        WritableMap result = new WritableNativeMap();
+        File f = new File(file);
+        if(f.exists()){
+            result.putBoolean("success", true);
+            result.putString("full_path", f.getAbsolutePath());
+        }else {
+            String fileDir = "";
+            if(fileType.equals("picture"))
+                fileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) .getAbsolutePath();
+            else if(fileType.equals("video"))
+                fileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES) .getAbsolutePath();
+            else if(fileType.equals("audio"))
+                fileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC) .getAbsolutePath();
+            else if(fileType.equals("document"))
+                fileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) .getAbsolutePath();
+            else
+                fileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) .getAbsolutePath();
+
             File f2 = new File(fileDir + "/" + file);
 
             if(f2.exists()){
