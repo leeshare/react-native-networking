@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <external-path name="external_files" path="."/>
+    <external-path name="external_files1" path="Movies"/>
+    <external-path name="external_files2" path="DCIM"/>
+    <external-path name="external_files3" path="Music"/>
+    <external-path name="external_files4" path="documents"/>
+    <external-path name="external_files5" path="Download"/>
+</paths>
