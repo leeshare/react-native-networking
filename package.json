@@ -1,58 +1,33 @@
 {
   "_args": [
     [
-      {
-        "raw": "react-native-networking@git+https://github.com/leeshare/react-native-networking.git",
-        "scope": null,
-        "escapedName": "react-native-networking",
-        "name": "react-native-networking",
-        "rawSpec": "git+https://github.com/leeshare/react-native-networking.git",
-        "spec": "git+https://github.com/leeshare/react-native-networking.git",
-        "type": "hosted",
-        "hosted": {
-          "type": "github",
-          "ssh": "git@github.com:leeshare/react-native-networking.git",
-          "sshUrl": "git+ssh://git@github.com/leeshare/react-native-networking.git",
-          "httpsUrl": "git+https://github.com/leeshare/react-native-networking.git",
-          "gitUrl": "git://github.com/leeshare/react-native-networking.git",
-          "shortcut": "github:leeshare/react-native-networking",
-          "directUrl": "https://raw.githubusercontent.com/leeshare/react-native-networking/master/package.json"
-        }
-      },
-      "/Users/admin/WorkStation/UseChinese/useabcv2/SourceCode/SMApp"
+      "git+https://github.com/leeshare/react-native-networking.git",
+      "/Users/shenmo/Work/ShenMo/ShenmoInfo/SourceCode/EduApp"
     ]
   ],
   "_from": "git+https://github.com/leeshare/react-native-networking.git",
-  "_id": "react-native-networking@0.1.5",
+  "_id": "react-native-networking@git+https://github.com/leeshare/react-native-networking.git#1fbdc1b7add6a709c4df5141a3115df46ab7657b",
+  "_inBundle": false,
   "_inCache": true,
+  "_integrity": "",
   "_location": "/react-native-networking",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "react-native-networking@git+https://github.com/leeshare/react-native-networking.git",
-    "scope": null,
-    "escapedName": "react-native-networking",
-    "name": "react-native-networking",
+    "type": "git",
+    "raw": "git+https://github.com/leeshare/react-native-networking.git",
     "rawSpec": "git+https://github.com/leeshare/react-native-networking.git",
-    "spec": "git+https://github.com/leeshare/react-native-networking.git",
-    "type": "hosted",
-    "hosted": {
-      "type": "github",
-      "ssh": "git@github.com:leeshare/react-native-networking.git",
-      "sshUrl": "git+ssh://git@github.com/leeshare/react-native-networking.git",
-      "httpsUrl": "git+https://github.com/leeshare/react-native-networking.git",
-      "gitUrl": "git://github.com/leeshare/react-native-networking.git",
-      "shortcut": "github:leeshare/react-native-networking",
-      "directUrl": "https://raw.githubusercontent.com/leeshare/react-native-networking/master/package.json"
-    }
+    "saveSpec": "git+https://github.com/leeshare/react-native-networking.git",
+    "fetchSpec": "https://github.com/leeshare/react-native-networking.git",
+    "gitCommittish": null
   },
   "_requiredBy": [
     "/"
   ],
-  "_resolved": "git+https://github.com/leeshare/react-native-networking.git#47246e377376c14e4acae5edcf109e544122ebcd",
+  "_resolved": "git+https://github.com/leeshare/react-native-networking.git#1fbdc1b7add6a709c4df5141a3115df46ab7657b",
   "_shasum": "d0abf6004f7d2bb54d9ada6cfec9ca229e9901f2",
   "_shrinkwrap": null,
-  "_spec": "react-native-networking@git+https://github.com/leeshare/react-native-networking.git",
-  "_where": "/Users/admin/WorkStation/UseChinese/useabcv2/SourceCode/SMApp",
+  "_spec": "git+https://github.com/leeshare/react-native-networking.git",
+  "_where": "/Users/shenmo/Work/ShenMo/ShenmoInfo/SourceCode/EduApp",
   "author": {
     "name": "Erdem Başeğmez",
     "email": "eduedix@gmail.com"
@@ -84,8 +59,6 @@
   "peerDependencies": {
     "react-native": ">=0.6.0"
   },
-  "readme": "\nfork from:\t\thttps://github.com/eduedix/react-native-networking\n\nI changed some function in android.\n\n",
-  "readmeFilename": "README.md",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/eduedix/react-native-networking.git"
@@ -93,5 +66,5 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "0.4.0"
+  "version": "0.5.0"
 }

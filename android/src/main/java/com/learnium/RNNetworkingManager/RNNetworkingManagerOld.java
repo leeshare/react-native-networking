@@ -1,27 +1,37 @@
 package com.learnium.RNNetworkingManager;
 
-import android.content.Context;
-import android.media.MediaPlayer;
-import android.os.Environment;
-import android.support.annotation.Nullable;
-import android.util.Log;
-
-import com.facebook.react.bridge.Arguments;
-import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
-import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.modules.core.DeviceEventManagerModule;
-
+import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.Arguments;
 import com.learnium.RNNetworkingManager.download.DownloadInfo;
 import com.learnium.RNNetworkingManager.download.DownloadResponseHandler;
 import com.learnium.RNNetworkingManager.download.MyDownloadManager;
 
+import android.app.DownloadManager;
+import android.app.DownloadManager.Query;
+import android.app.DownloadManager.Request;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.database.Cursor;
+import android.media.MediaPlayer;
+import android.os.Build;
+import android.os.Environment;
+import android.provider.ContactsContract;
+import android.support.annotation.Nullable;
+import android.util.Log;
+import android.net.Uri;
+import android.widget.Toast;
+
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -29,6 +39,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -36,42 +47,89 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.lang.Long;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
-public class RNNetworkingManager extends ReactContextBaseJavaModule {
+public class RNNetworkingManagerOld extends ReactContextBaseJavaModule {
 
-    String LogName = "RNNetworkingManager";
-    private static final String CONFIRM_EVENT_NAME = "confirmEvent";
-    private static final String EVENT_KEY_CONFIRM = "confirm";
+    private String downloadCompleteIntentName = DownloadManager.ACTION_DOWNLOAD_COMPLETE;
+    private IntentFilter downloadCompleteIntentFilter = new IntentFilter(downloadCompleteIntentName);
+    private BroadcastReceiver downloadCompleteReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Handle recieving the event
+            Long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0L);
+
+            if(callbacks.containsKey(id)) {
+                // Query the state of the download
+                DownloadManager downloadManager = (DownloadManager) reactContext.getSystemService(Context.DOWNLOAD_SERVICE);
+                DownloadManager.Query query = new DownloadManager.Query();
+                query.setFilterById(id);
+                Cursor cursor = downloadManager.query(query);
+
+                // it shouldn't be empty, but just in case
+                if (!cursor.moveToFirst()) {
+                    Log.e("react-native-networking", "Empty row");
+                    return;
+                }
+
+                // build the result
+                WritableMap result = new WritableNativeMap();
+                int statusIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS);
+                if (DownloadManager.STATUS_SUCCESSFUL != cursor.getInt(statusIndex)) {
+                    Log.w("react-native-networking", "Download Failed");
+                    int reasonIndex = cursor.getColumnIndex(DownloadManager.COLUMN_REASON);
+                    int reasonString = cursor.getInt(reasonIndex);
+                    result.putInt("error", reasonString);
+                } else {
+                    int uriIndex = cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI);
+                    String downloadedPackageUriString = cursor.getString(uriIndex);
+                    WritableMap successResult = new WritableNativeMap();
+                    successResult.putString("filePath", downloadedPackageUriString);
+                    result.putMap("success", successResult);
+                }
+
+                // call the callback
+                callbacks.get(id).invoke(result);
+            }
+
+
+            String extraID = DownloadManager.EXTRA_NOTIFICATION_CLICK_DOWNLOAD_IDS;
+            long[] references = intent.getLongArrayExtra(extraID);
+            for(long reference: references) {
+                if (reference == downloadId) {
+
+                }
+            }
+        }
+    };
+
+    ReactApplicationContext reactContext;
+    HashMap<Long, Callback> callbacks;
 
     private static final String METHOD = "method";
-    private static final String URL = "url";
     private static final String DESTINATION_DIR = "destinationDir";
     private static final String TO_SHARE_FOLDER = "toShareFolder";
     private static final String SHARE_FOLDER_TYPE = "shareFolderType";
-    private static final String IS_STOP = "is_stop";
 
     private long downloadId;
-    private String url = "";
     private String toShareFolder = "no";     //不传 就是不存放到 相册中
     private String shareFolderType = "0";     //如 1 相册/ 2 视频/ 3 音频 / 4 文档等
 
-    //ReactApplicationContext reactContext;
-    //static Activity activity;
-    private Context mContext;
+    // Get an instance of DownloadManager
+    DownloadManager downloadManager;
 
-    public RNNetworkingManager(ReactApplicationContext reactContext) {
+    public RNNetworkingManagerOld(ReactApplicationContext reactContext) {
         super(reactContext);
-        //this.reactContext = reactContext;
-        mContext = (Context)reactContext;
-
-        //默认最大请求数是1
-        //MyDownloadManager.getInstance((Context)reactContext).setMaxRequests(2);
+        this.reactContext = reactContext;
+        this.callbacks = new HashMap<Long, Callback>();
 
         // Register the reciever
-        //reactContext.registerReceiver(downloadCompleteReceiver, downloadCompleteIntentFilter);
-
+        reactContext.registerReceiver(downloadCompleteReceiver, downloadCompleteIntentFilter);
     }
 
     @ReactMethod
@@ -85,54 +143,16 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
     }
 
 
-    @Subscribe(threadMode = ThreadMode.BACKGROUND)
-    public void onMessageEvent(DownloadInfo info){
-        //txt.setText(txt.getText().toString()+"\n"+info.getUrl()+"---progress:"+info.getProgress()+"---total:"+info.getTotal());
-    }
-
-    /**
-     * 此方法的作用是，支持原始多次回调js
-     * @param reactContext
-     * @param eventName
-     * @param params
-     */
-    private void sendEvent(ReactContext reactContext,
-                           String eventName,
-                           @Nullable WritableMap params) {
-        reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                .emit(eventName, params);
-    }
-
-    private void commonEvent(String eventKey, Integer type, Long sofar, Long total, String fileName, String url) {
-        WritableMap map = Arguments.createMap();
-        map.putString("type", eventKey);
-
-        map.putString("download_so_far", Long.toString(sofar));
-        map.putString("download_total", Long.toString(total));
-        map.putString("file_name", fileName);
-        map.putString("file_url", url);
-        sendEvent(getReactApplicationContext(), CONFIRM_EVENT_NAME, map);
-    }
-
     /*
     1. 下载资源文件包
      */
     @ReactMethod
-    public void requestFile(ReadableMap options) {
+    public void requestFile(String url,  ReadableMap options, Callback successCallback) {
         Log.w("dm", options.getString("method"));
-
-        //activity = getCurrentActivity();
-        //if(activity != null){
-        //    mContext = activity.getApplicationContext();
-        //}
-
         if(options.getString(METHOD) == "GET") {
 
         }
 
-        if(options.hasKey(URL)){
-            url = options.getString(URL);
-        }
         String destinationDir = ".ys";
         if(options.hasKey(DESTINATION_DIR)){
             destinationDir = options.getString(DESTINATION_DIR);
@@ -143,9 +163,8 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
         if(options.hasKey(SHARE_FOLDER_TYPE)){
             shareFolderType = options.getString(SHARE_FOLDER_TYPE);
         }
-
-        //EventBus.getDefault().register(this);
-        this.newDownloadFile(url, destinationDir);
+        this._downloadFile(url, destinationDir, successCallback);
+        // successCallback.invoke(relativeX, relativeY, width, height);
 
     }
 
@@ -162,12 +181,47 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
         dir.delete();// 删除目录本身
     }
 
-    private void newDownloadFile(String url, String destinationDir){
+    private void _downloadFile(String url, String destinationDir, Callback successCallback) {
+        // Get an instance of DownloadManager
+        downloadManager = (DownloadManager) this.reactContext.getSystemService(Context.DOWNLOAD_SERVICE);
+
+        // Build a request
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+
+        // Download it silently
+        request.setVisibleInDownloadsUi(false);
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN);
+        //request.setDestinationInExternalFilesDir(context, null, "large.zip");
+        request.setAllowedNetworkTypes(Request.NETWORK_MOBILE | Request.NETWORK_WIFI);  //下载网络需求  手机数据流量、wifi
+        request.setAllowedOverRoaming(true);    //设置是否允许漫游网络 建立请求 默认true
+        request.allowScanningByMediaScanner();  //为了让下载的文件可以被其他应用扫描到
+
         String fileName = "temp";
         if(url.split("/").length > 0){
             fileName = url.split("/")[url.split("/").length - 1];
         }
-        /*if(toShareFolder.equals("yes")){
+
+        /*
+        if(destinationDir.split("/").length > 0){
+            String tempDir = "";
+            for(int i = 0; i < destinationDir.split("/").length; i++) {
+                if(destinationDir.split("/")[i].isEmpty())
+                    continue;
+                if(tempDir.isEmpty())
+                    tempDir = destinationDir.split("/")[i];
+                else
+                    tempDir += "/" + destinationDir.split("/")[i];
+            }
+            Environment.getExternalStoragePublicDirectory(tempDir).mkdir();
+        }else {
+            Environment.getExternalStoragePublicDirectory(destinationDir).mkdir();
+        }
+        request.setDestinationInExternalPublicDir("/" + destinationDir + "/", fileName);
+        */
+        //String dirType = Environment.getExternalStorageState();
+        //request.setDestinationInExternalFilesDir(reactContext, destinationDir, fileName);
+
+        if(toShareFolder.equals("yes")){
             String _path = destinationDir + fileName;
             if(shareFolderType.equals("1")){
                 //图片下载，如果图片没有后缀，则默认加 .png
@@ -186,53 +240,17 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
                 request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, _path);
         }else {
             request.setDestinationInExternalFilesDir(reactContext, destinationDir, fileName);
-        }*/
-        String dir = getDiskFileDir(mContext) + fileName;
-        MyDownloadManager.getInstance(mContext).download(url, dir, new DownloadResponseHandler() {
-            @Override
-            public void onFinish(File download_file) {
+        }
 
-            }
+        // Enqueue the request
+        downloadId = downloadManager.enqueue(request);
+        //callbacks.put(downloadId, successCallback);
 
-            @Override
-            public void onProgress(long currentBytes, long totalBytes, DownloadInfo info) {
-                //Log.e(LogName, currentBytes + "----" + totalBytes);
-                //progressBar1.setMax((int) totalBytes);
-                //progressBar1.setProgress((int) currentBytes);
-
-                commonEvent(EVENT_KEY_CONFIRM, 2, currentBytes, totalBytes, info.getFileName(), info.getUrl());
-            }
-
-            @Override
-            public void onFailure(String error_msg) {
-
-            }
-
-            @Override
-            public void onPause(DownloadInfo info) {
-
-            }
-
-            @Override
-            public void onCancle(DownloadInfo info) {
-
-            }
-        });
+        WritableMap result = new WritableNativeMap();
+        result.putString("download_id", Long.toString(downloadId));
+        result.putBoolean("success", true);
+        successCallback.invoke(result);
     }
-    @ReactMethod
-    public void pauseDownload(String url){
-        //Context context = (Context)this.reactContext;
-        /*if(options.hasKey(URL)){
-            String url = options.getString(URL);
-            MyDownloadManager.getInstance(mContext).pause(url);
-        }*/
-
-        Log.e(LogName, "pause=====" + url);
-        MyDownloadManager.getInstance(mContext).pause(url);
-    }
-
-
-
 
     /**
      * 2.1 查询下载进度
@@ -241,7 +259,67 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void queryFileInfo2(int _downloadId, Callback callback){
+        //DownloadManager manager = (DownloadManager) reactContext.getSystemService(Context.DOWNLOAD_SERVICE);
+        DownloadManager.Query query = new DownloadManager.Query();
+        if(_downloadId > 0){
+            query.setFilterById(_downloadId);
+        }else {
+            query.setFilterById(downloadId);
+        }
 
+        //Cursor cursor = manager.query(query);
+        Cursor cursor = downloadManager.query(query);
+        if(!cursor.moveToFirst()){
+            cursor.close();
+            return;
+        }
+
+        long id = cursor.getLong(cursor.getColumnIndex(DownloadManager.COLUMN_ID));
+        int status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS));
+        long downloadedSoFar = cursor.getLong(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
+        long totalSize = cursor.getLong(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+
+        String localFilename = null;
+        int fileUriIdx = cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI);
+        String fileUri = cursor.getString(fileUriIdx);
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            if (fileUri != null) {
+                localFilename = Uri.parse(fileUri).getPath();
+            }
+        } else {
+            //Android 7.0以上的方式：请求获取写入权限，这一步报错
+            //过时的方式：DownloadManager.COLUMN_LOCAL_FILENAME
+            //int fileNameIdx = c.getColumnIndex(DownloadManager.COLUMN_LOCAL_FILENAME);
+            //fileName = c.getString(fileNameIdx);
+            localFilename = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_FILENAME));
+        }
+
+        cursor.close();
+
+        /*DownloadManager.STATUS_SUCCESSFUL:   下载成功
+        DownloadManager.STATUS_FAILED:       下载失败
+        DownloadManager.STATUS_PENDING:      等待下载
+        DownloadManager.STATUS_RUNNING:      正在下载
+        DownloadManager.STATUS_PAUSED:       下载暂停
+        */
+        if(status == DownloadManager.STATUS_SUCCESSFUL) {
+        }
+
+         /* 特别注意: 查询获取到的 localFilename 才是下载文件真正的保存路径，在创建
+         * 请求时设置的保存路径不一定是最终的保存路径，因为当设置的路径已是存在的文件时，
+         * 下载器会自动重命名保存路径，例如: .../demo-1.apk, .../demo-2.apk
+         */
+        //System.out.println("下载成功, 打开文件, 文件路径: " + localFilename);
+
+        WritableMap result = new WritableNativeMap();
+        result.putBoolean("is_success", DownloadManager.STATUS_SUCCESSFUL == status);
+        result.putString("file_name", localFilename);
+        result.putString("download_so_far", Long.toString(downloadedSoFar));
+        result.putString("download_total", Long.toString(totalSize));
+        result.putString("id", Long.toString(id));
+        result.putString("download_id", Long.toString(downloadId));
+
+        callback.invoke(result);
     }
 
     /*
@@ -377,7 +455,7 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
             result.putBoolean("success", true);
             result.putString("full_path", f.getAbsolutePath());
         }else {
-            String fileDir = mContext.getApplicationContext().getExternalFilesDir("").getAbsolutePath();
+            String fileDir = reactContext.getApplicationContext().getExternalFilesDir("").getAbsolutePath();
             File f2 = new File(fileDir + "/" + file);
 
             if(f2.exists()){
@@ -441,7 +519,7 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
             result.putBoolean("success", true);
             result.putString("full_path", path);
         }else {
-            String fileDir = mContext.getApplicationContext().getExternalFilesDir("").getAbsolutePath();
+            String fileDir = reactContext.getApplicationContext().getExternalFilesDir("").getAbsolutePath();
             File f2 = new File(fileDir + "/" + file);
             if(f2.exists()){
                 path = f2.getAbsolutePath();
@@ -543,7 +621,7 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
         File file = new File(path);
         if (!file.exists())
             return;
-        OpenFileUtil2.openFile(file, mContext);
+        OpenFileUtil2.openFile(file, reactContext);
     }
 
     /**

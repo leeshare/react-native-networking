@@ -3,6 +3,14 @@ fork from:		https://github.com/eduedix/react-native-networking
 
 I changed some function in android and ios.
 
+(2019-05-27)
+  修改android端支持断点续传，抛弃原来系统提供的 DownloadManager 。
+  修改回调 为 DeviceEventManagerModule.RCTDeviceEventEmitter 
+  修改js调用方法 requestFile
+  增加js调用方法 pauseDownload
+
+	 
+
 (2017-11-08)
 包含以下几个方法：
 

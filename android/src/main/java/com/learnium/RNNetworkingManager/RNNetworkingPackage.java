@@ -1,7 +1,6 @@
 package com.learnium.RNNetworkingManager;
 
 import java.util.Arrays;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -11,16 +10,16 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 import com.facebook.react.bridge.JavaScriptModule;
 
-public class RNNetworkingManagerModule implements ReactPackage {
+public class RNNetworkingPackage implements ReactPackage {
 
   @Override
   public List<NativeModule> createNativeModules(
                               ReactApplicationContext reactContext) {
-    List<NativeModule> modules = new ArrayList<>();
+    //List<RNNetworkingManagerNew> modules = new ArrayList<>();
+    //modules.add(new RNNetworkingManagerNew(reactContext));
+    //return modules;
 
-    modules.add(new RNNetworkingManager(reactContext));
-
-    return modules;
+    return Arrays.<NativeModule>asList(new RNNetworkingManager(reactContext));
   }
 
   @Override
