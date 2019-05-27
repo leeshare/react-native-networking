@@ -107,7 +107,7 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
         WritableMap map = Arguments.createMap();
         map.putString("type", eventKey);
 
-        map.putString("download_so_far", Long.toString(sofar));
+        map.putString("download_sofar", Long.toString(sofar));
         map.putString("download_total", Long.toString(total));
         map.putString("file_name", fileName);
         map.putString("file_url", url);
