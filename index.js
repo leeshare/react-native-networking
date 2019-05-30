@@ -37,8 +37,8 @@ export default {
 		RNModule.pauseDownload(url);
 	},
   //1 暂时 ios 调用
-  requestFile(options, callback) {
-    RNModule.requestFile(options, callback);
+  requestFile(url, options, callback) {
+    RNModule.requestFile(url, options, callback);
   },
   //2 暂时 ios 调用
   queryFileInfo2(_downloadId, callback){

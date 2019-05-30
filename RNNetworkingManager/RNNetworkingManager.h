@@ -7,8 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "RCTBridgeModule.h"
+//#import "RCTBridgeModule.h"
 #import "AVFoundation/AVFoundation.h"
+
+#import <Foundation/Foundation.h>
+#import <React/RCTBridge.h>
+#import <React/RCTBridgeModule.h>
 
 //UIViewController
 //
