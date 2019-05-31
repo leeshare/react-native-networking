@@ -161,7 +161,7 @@ RCT_EXPORT_METHOD(requestFile: (NSDictionary *)options){
     
     
     operation = [[AFHTTPRequestOperation alloc]initWithRequest:request];
-    [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long totalBytesRead, long totalBytesExpectedToRead) {
+    [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
         NSString *url = [operation.request.URL absoluteString];
         NSArray *array = [url componentsSeparatedByString:@"?"];
