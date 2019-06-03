@@ -167,27 +167,40 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
         if(url.split("/").length > 0){
             fileName = url.split("/")[url.split("/").length - 1];
         }
-        /*if(toShareFolder.equals("yes")){
-            String _path = destinationDir + fileName;
+        String _path = getDiskFileDir(mContext) + fileName;
+        if(toShareFolder.equals("yes")){
+            _path = "/" + destinationDir + fileName;
             if(shareFolderType.equals("1")){
                 //图片下载，如果图片没有后缀，则默认加 .png
                 if(_path.indexOf(".") <= 0){
                     _path += ".png";
                 }
-                request.setDestinationInExternalPublicDir( Environment.DIRECTORY_DCIM, _path);
+                //request.setDestinationInExternalPublicDir( Environment.DIRECTORY_DCIM, _path);
+                //_path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + _path;
+                _path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + _path;
             }
-            else if(shareFolderType.equals("2"))
-                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_MOVIES, _path);
-            else if(shareFolderType.equals("3"))
-                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_MUSIC, _path);
-            else if(shareFolderType.equals("4"))
-                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOCUMENTS, _path);
-            else
-                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, _path);
+            else if(shareFolderType.equals("2")) {
+                //request.setDestinationInExternalPublicDir(Environment.DIRECTORY_MOVIES, _path);
+                _path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).getAbsolutePath() + _path;
+            }
+            else if(shareFolderType.equals("3")) {
+                //request.setDestinationInExternalPublicDir(Environment.DIRECTORY_MUSIC, _path);
+                _path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath() + _path;
+            }
+            else if(shareFolderType.equals("4")) {
+                //request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOCUMENTS, _path);
+                _path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath() + _path;
+            }
+            else {
+                //request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, _path);
+                _path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + _path;
+            }
         }else {
-            request.setDestinationInExternalFilesDir(reactContext, destinationDir, fileName);
-        }*/
-        String dir = getDiskFileDir(mContext) + fileName;
+            //request.setDestinationInExternalFilesDir(reactContext, destinationDir, fileName);
+            _path = getDiskFileDir(mContext) + fileName;
+        }
+        //String dir = getDiskFileDir(mContext) + fileName;
+        String dir = _path;
         MyDownloadManager.getInstance(mContext).download(url, dir, new DownloadResponseHandler() {
             @Override
             public void onFinish(File download_file) {
@@ -404,7 +417,8 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
         }else {
             String fileDir = "";
             if(fileType.equals("picture"))
-                fileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) .getAbsolutePath();
+                //fileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) .getAbsolutePath();
+                fileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) .getAbsolutePath();
             else if(fileType.equals("video"))
                 fileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES) .getAbsolutePath();
             else if(fileType.equals("audio"))
