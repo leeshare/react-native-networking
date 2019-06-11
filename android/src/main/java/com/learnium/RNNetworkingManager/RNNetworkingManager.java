@@ -176,8 +176,8 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
                     _path += ".png";
                 }
                 //request.setDestinationInExternalPublicDir( Environment.DIRECTORY_DCIM, _path);
-                //_path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + _path;
-                _path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + _path;
+                _path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + _path;
+                //_path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + _path;
             }
             else if(shareFolderType.equals("2")) {
                 //request.setDestinationInExternalPublicDir(Environment.DIRECTORY_MOVIES, _path);
@@ -417,8 +417,8 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
         }else {
             String fileDir = "";
             if(fileType.equals("picture"))
-                //fileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) .getAbsolutePath();
-                fileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) .getAbsolutePath();
+                fileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) .getAbsolutePath();
+                //fileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) .getAbsolutePath();
             else if(fileType.equals("video"))
                 fileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES) .getAbsolutePath();
             else if(fileType.equals("audio"))
