@@ -48,6 +48,11 @@ export default {
   queryFileInfo(callback){
     RNModule.queryFileInfo(callback);
   },
+	//2019-07-11 还原了原来的旧下载方法
+	//原因是新的下载方法，下载的图片，在android手机相册中确东西，导致相册识别不了
+	androidDownloadPicToAlbum(url, options, callback){
+		RNModule.requestPic(url, options, callback);
+	},
 
 
   //3
