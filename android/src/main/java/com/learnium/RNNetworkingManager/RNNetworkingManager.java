@@ -630,10 +630,6 @@ public class RNNetworkingManager extends ReactContextBaseJavaModule {
                 // call the callback
                 callbacks.get(id).invoke(result);
 
-                WritableMap result = new WritableNativeMap();
-                result.putBoolean("success", true);
-                callback.invoke(result);
-
             }
         }
     };
