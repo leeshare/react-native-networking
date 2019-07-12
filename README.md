@@ -1,6 +1,9 @@
 
 fork from:		https://github.com/eduedix/react-native-networking
 
+(2019-06-11)
+  修改下载到相册还是使用 Environment.DIRECTORY_DCIM ，而不是 Environment.DIRECTORY_PICTURES 。
+
 I changed some function in android and ios.
 
 (2019-05-27)
